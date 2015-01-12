@@ -37,7 +37,14 @@ Field.prototype.drawGrid = function (cell_size) {
     });
 };
 
-var ctx = document.getElementById('canvas').getContext('2d'),
-    field = new Field(ctx);
+if (typeof module !== 'undefined' &&
+    typeof module.exports !== 'undefined') {
+    // node (to run mocha tests)
+    module.exports = Field;
+} else {
+    // browser
+    var ctx = document.getElementById('canvas').getContext('2d'),
+        field = new Field(ctx);
 
-field.drawGrid(40);
+    field.drawGrid(40);
+}

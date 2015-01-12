@@ -1,0 +1,11 @@
+language: node_js
+node_js:
+    - "0.10"
+
+install:
+    - npm install
+    - npm install jshint
+
+script:
+    - ./node_modules/.bin/jshint index.js
+    - npm test
