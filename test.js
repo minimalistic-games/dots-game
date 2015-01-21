@@ -14,4 +14,14 @@ describe('Field', function () {
         field_300_200.drawGrid(40);
         expect(field_300_200.drawLine.callCount).to.equal(14);
     });
+
+    it('calculates closest lines intersection', function () {
+        var closest = (new Field({})).getClosestLinesIntersection;
+
+        expect(closest([0, 0], 100)).to.eql([0, 0]);
+        expect(closest([0, 19], 100)).to.eql([0, 0]);
+        expect(closest([0, 20], 100)).to.be.null();
+        expect(closest([40, 40], 10)).to.eql([4, 4]);
+        expect(closest([40, 50], 10)).to.eql([4, 5]);
+    });
 });
