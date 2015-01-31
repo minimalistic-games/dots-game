@@ -9,3 +9,4 @@ install:
 script:
     - ./node_modules/.bin/jshint *.js
     - npm test
+    - npm run coveralls
