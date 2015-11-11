@@ -2,13 +2,12 @@ sudo: false
 
 language: node_js
 node_js:
-    - "0.10"
+    - "5.0"
 
 install:
     - npm install
-    - npm install jshint
 
 script:
-    - ./node_modules/.bin/jshint *.js
+    - npm run lint
     - npm test
     - npm run coveralls

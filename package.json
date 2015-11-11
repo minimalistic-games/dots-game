@@ -4,25 +4,27 @@
   "description": "html5 version of a classic paper-based game",
   "main": "index.js",
   "scripts": {
+    "lint": "jshint index.js",
     "test": "mocha --reporter spec",
     "coverage": "istanbul cover _mocha test.js",
     "coveralls": "npm run coverage && coveralls < ./coverage/lcov.info"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/markhovskiy/dots-game.git"
+    "url": "https://github.com/oleksmarkh/dots-game.git"
   },
   "author": "Oleksii Markhovskyi",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/markhovskiy/dots-game/issues"
+    "url": "https://github.com/oleksmarkh/dots-game/issues"
   },
-  "homepage": "https://github.com/markhovskiy/dots-game",
+  "homepage": "https://github.com/oleksmarkh/dots-game",
   "devDependencies": {
-    "chai": "~1.10",
-    "mocha": "~2.1",
-    "sinon": "~1.12",
-    "istanbul": "~0.3",
-    "coveralls": "~2.11"
+    "chai": "^3.4.1",
+    "coveralls": "^2.11.4",
+    "istanbul": "^0.4.0",
+    "jshint": "^2.8.0",
+    "mocha": "^2.3.3",
+    "sinon": "^1.17.2"
   }
 }
