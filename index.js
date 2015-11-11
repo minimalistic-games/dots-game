@@ -17,18 +17,18 @@ Field.prototype.drawLine = function (from, to) {
     this.ctx.stroke();
 };
 
-Field.prototype.drawGrid = function (cell_size) {
+Field.prototype.drawGrid = function (cellSize) {
     var self = this;
 
     [0, 1].forEach(function (axis) {
         var size = self.ctx.canvas[axis ? 'height' : 'width'],
-            lines = Math.floor(size / cell_size),
+            lines = Math.floor(size / cellSize),
             offset,
             from,
             to;
 
         for (var i = 0; i <= lines; i++) {
-            offset = i * cell_size;
+            offset = i * cellSize;
             from = [0, offset];
             to = [size, offset];
             self.drawLine(axis ? from.reverse() : from,
@@ -37,29 +37,29 @@ Field.prototype.drawGrid = function (cell_size) {
     });
 };
 
-Field.prototype.drawDotPlaceholderOnMouseMove = function (cell_size) {
+Field.prototype.drawDotPlaceholderOnMouseMove = function (cellSize) {
     var self = this;
 
     this.ctx.canvas.addEventListener('mousemove', function (e) {
-        var lines_intersection = self.getClosestLinesIntersection([e.offsetX,
-                                                                   e.offsetY],
-                                                                  cell_size);
+        var linesIntersection = self.getClosestLinesIntersection([e.offsetX,
+                                                                  e.offsetY],
+                                                                 cellSize);
 
         self.clear();
-        self.drawGrid(cell_size);
+        self.drawGrid(cellSize);
 
-        if (lines_intersection) {
-            self.drawDotPlaceholder(lines_intersection, cell_size);
+        if (linesIntersection) {
+            self.drawDotPlaceholder(linesIntersection, cellSize);
         }
     });
 };
 
-Field.prototype.getClosestLinesIntersection = function (coords, cell_size) {
+Field.prototype.getClosestLinesIntersection = function (coords, cellSize) {
     var tolerance = 0.2,
         closest = [];
 
     [0, 1].forEach(function (axis) {
-        var relative = coords[axis] / cell_size,
+        var relative = coords[axis] / cellSize,
             before = Math.floor(relative),
             after = Math.ceil(relative);
 
@@ -74,11 +74,11 @@ Field.prototype.getClosestLinesIntersection = function (coords, cell_size) {
                                                                 : null;
 };
 
-Field.prototype.drawDotPlaceholder = function (coords, cell_size) {
+Field.prototype.drawDotPlaceholder = function (coords, cellSize) {
     ctx.beginPath();
-    ctx.arc(coords[0] * cell_size,
-            coords[1] * cell_size,
-            6,
+    ctx.arc(coords[0] * cellSize,
+            coords[1] * cellSize,
+            8,
             0,
             2 * Math.PI,
             false);
@@ -94,8 +94,8 @@ if (typeof module !== 'undefined' &&
     // browser
     var ctx = document.getElementById('canvas').getContext('2d'),
         field = new Field(ctx),
-        cell_size = 40;
+        cellSize = 40;
 
-    field.drawGrid(cell_size);
-    field.drawDotPlaceholderOnMouseMove(cell_size);
+    field.drawGrid(cellSize);
+    field.drawDotPlaceholderOnMouseMove(cellSize);
 }
