@@ -4,9 +4,10 @@
   "description": "html5 version of a classic paper-based game",
   "main": "index.js",
   "scripts": {
-    "lint": "jshint index.js",
-    "test": "mocha --reporter spec",
-    "coverage": "istanbul cover _mocha test.js",
+    "build": "browserify ./js/main.js --debug -o bundle.js",
+    "lint": "jshint ./js",
+    "test": "mocha --reporter spec ./js/test",
+    "coverage": "istanbul cover _mocha ./js/test",
     "coveralls": "npm run coverage && coveralls < ./coverage/lcov.info"
   },
   "repository": {
@@ -20,6 +21,7 @@
   },
   "homepage": "https://github.com/oleksmarkh/dots-game",
   "devDependencies": {
+    "browserify": "^12.0.1",
     "chai": "^3.4.1",
     "coveralls": "^2.11.4",
     "istanbul": "^0.4.0",

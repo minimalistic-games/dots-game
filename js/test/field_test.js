@@ -1,6 +1,7 @@
-var expect = require('chai').expect,
-    sinon = require('sinon'),
-    Field = require('./index');
+var expect = require('chai').expect;
+var sinon = require('sinon');
+
+var Field = require('../field');
 
 describe('Field', function () {
     it('draws proper number of lines while drawing a grid', function () {
@@ -20,8 +21,8 @@ describe('Field', function () {
 
         expect(closest([0, 0], 100)).to.eql([0, 0]);
         expect(closest([0, 19], 100)).to.eql([0, 0]);
-        expect(closest([0, 20], 100)).to.be.null;
-        expect(closest([38, 40], 10)).to.be.null;
+        expect(closest([0, 20], 100)).to.eql(null);
+        expect(closest([38, 40], 10)).to.eql(null);
         expect(closest([39, 40], 10)).to.eql([4, 4]);
         expect(closest([40, 40], 10)).to.eql([4, 4]);
         expect(closest([40, 50], 10)).to.eql([4, 5]);
