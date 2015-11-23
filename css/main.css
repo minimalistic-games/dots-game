@@ -1,5 +1,14 @@
+body {
+    padding: 0.2em;
+    color: #444;
+}
+
+p {
+    margin: 0 0 1em;
+    font-family: monospace;
+}
+
 canvas {
     display: block;
-    margin: 2em auto;
-    border: 2px solid #eee;
+    border: 1px solid #444;
 }

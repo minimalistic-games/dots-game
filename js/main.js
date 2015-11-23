@@ -1,8 +1,7 @@
 var Field = require('./field');
 
-var ctx = document.querySelector('canvas').getContext('2d');
-var field = new Field(ctx);
-var cellSize = 40;
+var field = new Field(document.querySelector('canvas').getContext('2d'),
+                      40);
 
-field.drawGrid(cellSize);
-field.drawDotPlaceholderOnMouseMove(cellSize);
+field.render();
+field.subscribe();

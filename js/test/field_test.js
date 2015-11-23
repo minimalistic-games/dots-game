@@ -5,26 +5,27 @@ var Field = require('../field');
 
 describe('Field', function () {
     it('draws proper number of lines while drawing a grid', function () {
-        var field600x600 = new Field({canvas: {width: 600, height: 600}});
+        var field600x600 = new Field({canvas: {width: 600, height: 600}}, 40);
         Field.prototype.drawLine = sinon.spy();
-        field600x600.drawGrid(40);
+        field600x600.drawGrid();
         expect(field600x600.drawLine.callCount).to.equal(32);
 
-        var field300x200 = new Field({canvas: {width: 300, height: 200}});
+        var field300x200 = new Field({canvas: {width: 300, height: 200}}, 40);
         Field.prototype.drawLine = sinon.spy();
-        field300x200.drawGrid(40);
+        field300x200.drawGrid();
         expect(field300x200.drawLine.callCount).to.equal(14);
     });
 
     it('calculates closest lines intersection', function () {
-        var closest = (new Field({})).getClosestLinesIntersection;
+        var field100 = new Field({}, 100);
+        expect(field100.getClosestLinesIntersection([0, 0])).to.eql([0, 0]);
+        expect(field100.getClosestLinesIntersection([0, 19])).to.eql([0, 0]);
+        expect(field100.getClosestLinesIntersection([0, 20])).to.equal(null);
 
-        expect(closest([0, 0], 100)).to.eql([0, 0]);
-        expect(closest([0, 19], 100)).to.eql([0, 0]);
-        expect(closest([0, 20], 100)).to.equal(null);
-        expect(closest([38, 40], 10)).to.equal(null);
-        expect(closest([39, 40], 10)).to.eql([4, 4]);
-        expect(closest([40, 40], 10)).to.eql([4, 4]);
-        expect(closest([40, 50], 10)).to.eql([4, 5]);
+        var field10 = new Field({}, 10);
+        expect(field10.getClosestLinesIntersection([38, 40])).to.equal(null);
+        expect(field10.getClosestLinesIntersection([39, 40])).to.eql([4, 4]);
+        expect(field10.getClosestLinesIntersection([40, 40])).to.eql([4, 4]);
+        expect(field10.getClosestLinesIntersection([40, 50])).to.eql([4, 5]);
     });
 });
