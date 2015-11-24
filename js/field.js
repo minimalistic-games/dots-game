@@ -1,39 +1,39 @@
-var Field = function (ctx, cellSize) {
-    this.ctx = ctx;
-    this.ctx.lineWidth = 1;
+var Field = function (view, cellSize) {
+    this.view = view;
 
     this.cellSize = cellSize;
     this.minCellSize = 10;
     this.maxCellSize = 100;
+
+    this.dots = [];
 };
 
 Field.prototype.render = function () {
-    this.clear();
+    this.view.clear();
     this.drawGrid();
+    this.drawDots();
 };
 
 Field.prototype.subscribe = function () {
-    this.ctx.canvas.addEventListener('wheel', this.zoomOnScroll.bind(this));
-    this.ctx.canvas.addEventListener('mousemove', this.drawDotPlaceholderOnMouseMove.bind(this));
+    this.view.listenTo('wheel', this.zoomOnScroll.bind(this));
+    this.view.listenTo('mousemove', this.drawDotPlaceholderOnMouseMove.bind(this));
+    this.view.listenTo('click', this.placeDotOnClick.bind(this));
 };
 
-Field.prototype.clear = function () {
-    this.ctx.clearRect(0,
-                       0,
-                       this.ctx.canvas.width,
-                       this.ctx.canvas.height);
-};
+Field.prototype.hasDot = function (coords) {
+    var equals = function (dot) {
+        return dot[0] === coords[0] &&
+               dot[1] === coords[1];
+    };
 
-Field.prototype.drawLine = function (from, to) {
-    this.ctx.beginPath();
-    this.ctx.moveTo(from[0], from[1]);
-    this.ctx.lineTo(to[0], to[1]);
-    this.ctx.stroke();
+    return Boolean(this.dots.find(equals));
 };
 
 Field.prototype.drawGrid = function () {
+    var dimensions = this.view.getDimensions();
+
     [0, 1].forEach(function (axis) {
-        var size = this.ctx.canvas[axis ? 'height' : 'width'];
+        var size = dimensions[axis];
         var lines = Math.floor(size / this.cellSize);
 
         for (var i = 0; i <= lines; i++) {
@@ -41,10 +41,16 @@ Field.prototype.drawGrid = function () {
             var from = [0, offset];
             var to = [size, offset];
 
-            this.drawLine(axis ? from.reverse() : from,
-                          axis ? to.reverse() : to);
+            this.view.drawLine(axis ? from.reverse() : from,
+                               axis ? to.reverse() : to);
         }
     }.bind(this));
+};
+
+Field.prototype.drawDots = function () {
+    this.dots.forEach(this.view.drawDot.bind(this.view,
+                                             '#c20',
+                                             this.cellSize));
 };
 
 Field.prototype.zoomOnScroll = function (e) {
@@ -64,8 +70,20 @@ Field.prototype.drawDotPlaceholderOnMouseMove = function (e) {
 
     this.render();
 
-    if (linesIntersection) {
-        this.drawDotPlaceholder(linesIntersection);
+    if (linesIntersection && !this.hasDot(linesIntersection)) {
+        this.view.drawDot('rgba(100, 120, 140, 0.8)',
+                          this.cellSize,
+                          linesIntersection);
+    }
+};
+
+Field.prototype.placeDotOnClick = function (e) {
+    var linesIntersection = this.getClosestLinesIntersection([e.offsetX,
+                                                              e.offsetY]);
+
+    if (linesIntersection && !this.hasDot(linesIntersection)) {
+        this.dots.push(linesIntersection);
+        this.render();
     }
 };
 
@@ -87,18 +105,6 @@ Field.prototype.getClosestLinesIntersection = function (coords) {
 
     return closest[0] !== undefined && closest[1] !== undefined ? closest
                                                                 : null;
-};
-
-Field.prototype.drawDotPlaceholder = function (coords) {
-    this.ctx.beginPath();
-    this.ctx.arc(coords[0] * this.cellSize,
-                 coords[1] * this.cellSize,
-                 Math.max(this.cellSize / 5, 4),
-                 0,
-                 2 * Math.PI,
-                 false);
-    this.ctx.fillStyle = 'rgba(100, 120, 140, 0.8)';
-    this.ctx.fill();
 };
 
 module.exports = Field;
