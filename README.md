@@ -19,9 +19,9 @@ html5 version of a classic paper-based [game](https://en.wikipedia.org/wiki/Dots
 
 ## features/todo
 
+- [x] zoom
 - [ ] offline mode for 2 players
-- [ ] zoom
 - [ ] snapshots storage for save/resume
+- [ ] moves history/replay
 - [ ] AI
 - [ ] online multiplayer (via WebRTC)
-- [ ] moves history/replay
