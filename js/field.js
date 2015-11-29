@@ -44,13 +44,18 @@ Field.prototype.drawGrid = function () {
             this.view.drawLine(axis ? from.reverse() : from,
                                axis ? to.reverse() : to);
         }
-    }.bind(this));
+    }, this);
+
+    this.view.drawStrokeRect([0, 0],
+                             dimensions);
 };
 
 Field.prototype.drawDots = function () {
-    this.dots.forEach(this.view.drawDot.bind(this.view,
-                                             '#c20',
-                                             this.cellSize));
+    this.dots.forEach(function (coords, index) {
+        this.view.drawDot(this.view.getColor(index % 2 ? 'blue' : 'red', 1),
+                          this.cellSize,
+                          coords);
+    }, this);
 };
 
 Field.prototype.zoomOnScroll = function (e) {
@@ -71,7 +76,7 @@ Field.prototype.drawDotPlaceholderOnMouseMove = function (e) {
     this.render();
 
     if (linesIntersection && !this.hasDot(linesIntersection)) {
-        this.view.drawDot('rgba(100, 120, 140, 0.8)',
+        this.view.drawDot(this.view.getColor(this.dots.length % 2 ? 'blue' : 'red', 0.6),
                           this.cellSize,
                           linesIntersection);
     }
@@ -101,7 +106,7 @@ Field.prototype.getClosestLinesIntersection = function (coords) {
         } else if (after - relative < tolerance) {
             closest[axis] = after;
         }
-    }.bind(this));
+    }, this);
 
     return closest[0] !== undefined && closest[1] !== undefined ? closest
                                                                 : null;

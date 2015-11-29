@@ -9,14 +9,18 @@ describe('Field', function () {
         var view600x600 = new View({canvas: {width: 600, height: 600}});
         var field600x600 = new Field(view600x600, 40);
         View.prototype.drawLine = sinon.spy();
+        View.prototype.drawStrokeRect = sinon.spy();
         field600x600.drawGrid();
         expect(view600x600.drawLine.callCount).to.equal(32);
+        expect(view600x600.drawStrokeRect.callCount).to.equal(1);
 
         var view300x200 = new View({canvas: {width: 300, height: 200}});
         var field300x200 = new Field(view300x200, 40);
         View.prototype.drawLine = sinon.spy();
+        View.prototype.drawStrokeRect = sinon.spy();
         field300x200.drawGrid();
         expect(view300x200.drawLine.callCount).to.equal(14);
+        expect(view300x200.drawStrokeRect.callCount).to.equal(1);
     });
 
     it('calculates closest lines intersection', function () {
