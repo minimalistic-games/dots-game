@@ -8,6 +8,14 @@ var Field = function (view, cellSize) {
     this.dots = [];
 };
 
+Field.prototype.load = function () {
+    this.dots = JSON.parse(localStorage.getItem('dots')) || [];
+};
+
+Field.prototype.save = function () {
+    localStorage.setItem('dots', JSON.stringify(this.dots));
+};
+
 Field.prototype.render = function () {
     this.view.clear();
     this.drawGrid();
@@ -15,6 +23,8 @@ Field.prototype.render = function () {
 };
 
 Field.prototype.subscribe = function () {
+    document.addEventListener('keydown', this.clearOnKeyDown.bind(this));
+
     this.view.listenTo('wheel', this.zoomOnScroll.bind(this));
     this.view.listenTo('mousemove', this.drawDotPlaceholderOnMouseMove.bind(this));
     this.view.listenTo('click', this.placeDotOnClick.bind(this));
@@ -58,6 +68,14 @@ Field.prototype.drawDots = function () {
     }, this);
 };
 
+Field.prototype.clearOnKeyDown = function (e) {
+    if (!e.altKey || e.keyCode !== 67) { return; }
+
+    this.dots = [];
+    this.save();
+    this.render();
+};
+
 Field.prototype.zoomOnScroll = function (e) {
     if (!e.deltaY) { return; }
 
@@ -89,6 +107,7 @@ Field.prototype.placeDotOnClick = function (e) {
     if (linesIntersection && !this.hasDot(linesIntersection)) {
         this.dots.push(linesIntersection);
         this.render();
+        this.save();
     }
 };
 
