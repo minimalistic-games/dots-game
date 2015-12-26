@@ -8,8 +8,8 @@ var View = function (ctx) {
                    'blue': [0, 32, 192]};
 };
 
-View.prototype.getColor = function (color, opacity) {
-    return 'rgba(' + this.colors[color].concat(opacity).join(',') + ')';
+View.prototype.getColor = function (colorName, opacity) {
+    return 'rgba(' + this.colors[colorName].concat(opacity).join(',') + ')';
 };
 
 View.prototype.listenTo = function (e, callback) {

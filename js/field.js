@@ -1,19 +1,51 @@
+var Graph = require('./graph');
+
 var Field = function (view, cellSize) {
     this.view = view;
-
     this.cellSize = cellSize;
-    this.minCellSize = 10;
-    this.maxCellSize = 100;
-
-    this.dots = [];
+    this.players = this.initPlayers();
 };
 
+Field.prototype.minCellSize = 10;
+Field.prototype.maxCellSize = 100;
+Field.prototype.nextPlayer = 'red';
+
+Field.prototype.initPlayers = function () {
+    return {'red': [new Graph()],
+            'blue': [new Graph()]};
+};
+
+/**
+ * "playersData" example:
+ * {red: [{dots: [[8,4], [8,5], [10,2]]}]
+ *  blue: [{dots: [[9,4], [8,6]]}]}
+ */
 Field.prototype.load = function () {
-    this.dots = JSON.parse(localStorage.getItem('dots')) || [];
+    var playersData = JSON.parse(localStorage.getItem('players'));
+    var graphFromData = function (graphData) {
+        return new Graph(graphData.dots);
+    };
+
+    if (playersData) {
+        for (var player in playersData) {
+            this.players[player] = playersData[player].map(graphFromData);
+        }
+    } else {
+        this.players = this.initPlayers();
+    }
+
+    this.nextPlayer = this.getPlayerDotsNumber('red') > this.getPlayerDotsNumber('blue') ? 'blue'
+                                                                                         : 'red';
 };
 
 Field.prototype.save = function () {
-    localStorage.setItem('dots', JSON.stringify(this.dots));
+    localStorage.setItem('players', JSON.stringify(this.players));
+};
+
+Field.prototype.getPlayerDotsNumber = function (player) {
+    return this.players[player].reduce(function (sum, graph) {
+        return sum + graph.dots.length;
+    }, 0);
 };
 
 Field.prototype.render = function () {
@@ -28,15 +60,6 @@ Field.prototype.subscribe = function () {
     this.view.listenTo('wheel', this.zoomOnScroll.bind(this));
     this.view.listenTo('mousemove', this.drawDotPlaceholderOnMouseMove.bind(this));
     this.view.listenTo('click', this.placeDotOnClick.bind(this));
-};
-
-Field.prototype.hasDot = function (coords) {
-    var equals = function (dot) {
-        return dot[0] === coords[0] &&
-               dot[1] === coords[1];
-    };
-
-    return Boolean(this.dots.find(equals));
 };
 
 Field.prototype.drawGrid = function () {
@@ -61,17 +84,28 @@ Field.prototype.drawGrid = function () {
 };
 
 Field.prototype.drawDots = function () {
-    this.dots.forEach(function (coords, index) {
-        this.view.drawDot(this.view.getColor(index % 2 ? 'blue' : 'red', 1),
-                          this.cellSize,
-                          coords);
+    for (var player in this.players) {
+        this.drawPlayerDots(player);
+    }
+};
+
+Field.prototype.drawPlayerDots = function (player) {
+    var playerColor = this.view.getColor(player, 1);
+
+    this.players[player].forEach(function (graph) {
+        graph.dots.forEach(function (coords) {
+            this.view.drawDot(playerColor,
+                              this.cellSize,
+                              coords);
+        }, this);
     }, this);
 };
 
 Field.prototype.clearOnKeyDown = function (e) {
     if (!e.altKey || e.keyCode !== 67) { return; }
 
-    this.dots = [];
+    this.players = this.initPlayers();
+    this.nextPlayer = 'red';
     this.save();
     this.render();
 };
@@ -88,30 +122,64 @@ Field.prototype.zoomOnScroll = function (e) {
 };
 
 Field.prototype.drawDotPlaceholderOnMouseMove = function (e) {
-    var linesIntersection = this.getClosestLinesIntersection([e.offsetX,
-                                                              e.offsetY]);
+    var linesIntersection = this.getClosestGridLinesIntersection([e.offsetX,
+                                                                  e.offsetY]);
 
     this.render();
 
     if (linesIntersection && !this.hasDot(linesIntersection)) {
-        this.view.drawDot(this.view.getColor(this.dots.length % 2 ? 'blue' : 'red', 0.6),
+        this.view.drawDot(this.view.getColor(this.nextPlayer, 0.6),
                           this.cellSize,
                           linesIntersection);
     }
 };
 
 Field.prototype.placeDotOnClick = function (e) {
-    var linesIntersection = this.getClosestLinesIntersection([e.offsetX,
-                                                              e.offsetY]);
+    var linesIntersection = this.getClosestGridLinesIntersection([e.offsetX,
+                                                                  e.offsetY]);
 
     if (linesIntersection && !this.hasDot(linesIntersection)) {
-        this.dots.push(linesIntersection);
+        this.placeDot(linesIntersection);
+        this.nextPlayer = this.nextPlayer == 'red' ? 'blue' : 'red';
         this.render();
         this.save();
     }
 };
 
-Field.prototype.getClosestLinesIntersection = function (coords) {
+Field.prototype.hasDot = function (coords) {
+    var equals = function (dot) {
+        return dot[0] === coords[0] &&
+               dot[1] === coords[1];
+    };
+
+    for (var player in this.players) {
+        var playerGraphs = this.players[player];
+
+        for (var graphIndex in playerGraphs) {
+            if (playerGraphs[graphIndex].dots.find(equals)) { return true; }
+        }
+    }
+
+    return false;
+};
+
+Field.prototype.placeDot = function (coords) {
+    var playerGraphs = this.players[this.nextPlayer];
+
+    for (var graphIndex in playerGraphs) {
+        var graph = playerGraphs[graphIndex];
+
+        if (graph.isNear(coords)) {
+            graph.dots.push(coords);
+            // todo: check other graphs and merge if current dot connects those
+            return;
+        }
+    }
+
+    playerGraphs.push((new Graph()).dots.push(coords));
+};
+
+Field.prototype.getClosestGridLinesIntersection = function (coords) {
     var tolerance = 0.2;
     var closest = [];
 

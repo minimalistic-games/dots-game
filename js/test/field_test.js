@@ -23,23 +23,30 @@ describe('Field', function () {
         expect(view300x200.drawStrokeRect.callCount).to.equal(1);
     });
 
-    it('calculates closest lines intersection', function () {
+    it('calculates closest grid lines intersection', function () {
         var field100 = new Field({}, 100);
-        expect(field100.getClosestLinesIntersection([0, 0])).to.eql([0, 0]);
-        expect(field100.getClosestLinesIntersection([0, 19])).to.eql([0, 0]);
-        expect(field100.getClosestLinesIntersection([0, 20])).to.equal(null);
+        expect(field100.getClosestGridLinesIntersection([0, 0])).to.eql([0, 0]);
+        expect(field100.getClosestGridLinesIntersection([0, 19])).to.eql([0, 0]);
+        expect(field100.getClosestGridLinesIntersection([0, 20])).to.equal(null);
 
         var field10 = new Field({}, 10);
-        expect(field10.getClosestLinesIntersection([38, 40])).to.equal(null);
-        expect(field10.getClosestLinesIntersection([39, 40])).to.eql([4, 4]);
-        expect(field10.getClosestLinesIntersection([40, 40])).to.eql([4, 4]);
-        expect(field10.getClosestLinesIntersection([40, 50])).to.eql([4, 5]);
+        expect(field10.getClosestGridLinesIntersection([38, 40])).to.equal(null);
+        expect(field10.getClosestGridLinesIntersection([39, 40])).to.eql([4, 4]);
+        expect(field10.getClosestGridLinesIntersection([40, 40])).to.eql([4, 4]);
+        expect(field10.getClosestGridLinesIntersection([40, 50])).to.eql([4, 5]);
     });
 
     it('detects if dot is present', function () {
         var field = new Field({});
         expect(field.hasDot([0, 0])).to.equal(false);
-        field.dots.push([0, 0]);
+        field.players.red[0].dots.push([0, 0]);
         expect(field.hasDot([0, 0])).to.equal(true);
+    });
+
+    it('calculates gots number per player', function () {
+        var field = new Field({});
+        expect(field.getPlayerDotsNumber('red')).to.equal(0);
+        field.players.red[0].dots.push([0, 0], [0, 1]);
+        expect(field.getPlayerDotsNumber('red')).to.equal(2);
     });
 });
