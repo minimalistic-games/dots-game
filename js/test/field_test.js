@@ -39,14 +39,14 @@ describe('Field', function () {
     it('detects if dot is present', function () {
         var field = new Field({});
         expect(field.hasDot([0, 0])).to.equal(false);
-        field.players.red[0].dots.push([0, 0]);
+        field.players.red[0].dots.add([0, 0]);
         expect(field.hasDot([0, 0])).to.equal(true);
     });
 
     it('calculates gots number per player', function () {
         var field = new Field({});
         expect(field.getPlayerDotsNumber('red')).to.equal(0);
-        field.players.red[0].dots.push([0, 0], [0, 1]);
-        expect(field.getPlayerDotsNumber('red')).to.equal(2);
+        field.players.red[0].dots.add([0, 0]);
+        expect(field.getPlayerDotsNumber('red')).to.equal(1);
     });
 });

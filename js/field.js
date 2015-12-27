@@ -15,15 +15,10 @@ Field.prototype.initPlayers = function () {
             'blue': [new Graph()]};
 };
 
-/**
- * "playersData" example:
- * {red: [{dots: [[8,4], [8,5], [10,2]]}]
- *  blue: [{dots: [[9,4], [8,6]]}]}
- */
 Field.prototype.load = function () {
     var playersData = JSON.parse(localStorage.getItem('players'));
     var graphFromData = function (graphData) {
-        return new Graph(graphData.dots);
+        return new Graph(graphData);
     };
 
     if (playersData) {
@@ -39,12 +34,21 @@ Field.prototype.load = function () {
 };
 
 Field.prototype.save = function () {
-    localStorage.setItem('players', JSON.stringify(this.players));
+    var playersData = {};
+    var dataFromGraph = function (graph) {
+        return Array.from(graph.dots);
+    };
+
+    for (var player in this.players) {
+        playersData[player] = this.players[player].map(dataFromGraph);
+    }
+
+    localStorage.setItem('players', JSON.stringify(playersData));
 };
 
 Field.prototype.getPlayerDotsNumber = function (player) {
     return this.players[player].reduce(function (sum, graph) {
-        return sum + graph.dots.length;
+        return sum + graph.dots.size;
     }, 0);
 };
 
@@ -93,11 +97,11 @@ Field.prototype.drawPlayerDots = function (player) {
     var playerColor = this.view.getColor(player, 1);
 
     this.players[player].forEach(function (graph) {
-        graph.dots.forEach(function (coords) {
+        for (var coords of graph.dots) {
             this.view.drawDot(playerColor,
                               this.cellSize,
                               coords);
-        }, this);
+        }
     }, this);
 };
 
@@ -156,7 +160,9 @@ Field.prototype.hasDot = function (coords) {
         var playerGraphs = this.players[player];
 
         for (var graphIndex in playerGraphs) {
-            if (playerGraphs[graphIndex].dots.find(equals)) { return true; }
+            if (Array.from(playerGraphs[graphIndex].dots).find(equals)) {
+                return true;
+            }
         }
     }
 
@@ -170,13 +176,16 @@ Field.prototype.placeDot = function (coords) {
         var graph = playerGraphs[graphIndex];
 
         if (graph.isNear(coords)) {
-            graph.dots.push(coords);
+            graph.add(coords);
             // todo: check other graphs and merge if current dot connects those
             return;
         }
     }
 
-    playerGraphs.push((new Graph()).dots.push(coords));
+    var newGraph = new Graph();
+
+    newGraph.add(coords);
+    playerGraphs.push(newGraph);
 };
 
 Field.prototype.getClosestGridLinesIntersection = function (coords) {
