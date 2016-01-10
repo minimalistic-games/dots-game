@@ -7,3 +7,6 @@ var field = new Field(new View(document.querySelector('canvas').getContext('2d')
 field.load();
 field.render();
 field.subscribe();
+
+// for debugging only
+window.field = field;

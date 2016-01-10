@@ -56,6 +56,7 @@ Field.prototype.render = function () {
     this.view.clear();
     this.drawGrid();
     this.drawDots();
+    this.drawLines();
 };
 
 Field.prototype.subscribe = function () {
@@ -68,6 +69,7 @@ Field.prototype.subscribe = function () {
 
 Field.prototype.drawGrid = function () {
     var dimensions = this.view.getDimensions();
+    var color = this.view.getColor('black', 0.8);
 
     [0, 1].forEach(function (axis) {
         var size = dimensions[axis];
@@ -78,7 +80,9 @@ Field.prototype.drawGrid = function () {
             var from = [0, offset];
             var to = [size, offset];
 
-            this.view.drawLine(axis ? from.reverse() : from,
+            this.view.drawLine(color,
+                               1,
+                               axis ? from.reverse() : from,
                                axis ? to.reverse() : to);
         }
     }, this);
@@ -93,16 +97,45 @@ Field.prototype.drawDots = function () {
     }
 };
 
+Field.prototype.drawLines = function () {
+    for (var player in this.players) {
+        this.drawPlayerLines(player);
+    }
+};
+
 Field.prototype.drawPlayerDots = function (player) {
-    var playerColor = this.view.getColor(player, 1);
+    var color = this.view.getColor(player, 1);
 
     this.players[player].forEach(function (graph) {
         for (var coords of graph.dots) {
-            this.view.drawDot(playerColor,
-                              this.cellSize,
-                              coords);
+            this.view.drawDot(color,
+                              this.getDotRadius(),
+                              coords.map(this.scaleCoord, this));
         }
     }, this);
+};
+
+Field.prototype.drawPlayerLines = function (player) {
+    var color = this.view.getColor(player, 0.8);
+
+    this.players[player].forEach(function (graph) {
+        for (var line of graph.lines) {
+            var dots = Array.from(line);
+
+            this.view.drawLine(color,
+                               2,
+                               dots[0].map(this.scaleCoord, this),
+                               dots[1].map(this.scaleCoord, this));
+        }
+    }, this);
+};
+
+Field.prototype.scaleCoord = function (coord) {
+    return coord * this.cellSize;
+};
+
+Field.prototype.getDotRadius = function () {
+    return Math.max(this.cellSize / 5, 4);
 };
 
 Field.prototype.clearOnKeyDown = function (e) {
@@ -133,8 +166,8 @@ Field.prototype.drawDotPlaceholderOnMouseMove = function (e) {
 
     if (linesIntersection && !this.hasDot(linesIntersection)) {
         this.view.drawDot(this.view.getColor(this.nextPlayer, 0.6),
-                          this.cellSize,
-                          linesIntersection);
+                          this.getDotRadius(),
+                          linesIntersection.map(this.scaleCoord, this));
     }
 };
 

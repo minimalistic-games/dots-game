@@ -7,8 +7,10 @@ Graph.defineAllLines = function (dots) {
     var lines = new Set();
 
     for (var di of dots) {
-        for (var li of Graph.defineLines(di, dots)) {
-            lines.add(li);
+        for (var lj of Graph.defineLines(di, dots)) {
+            if (!Graph.hasLine(lj, lines)) {
+                lines.add(lj);
+            }
         }
     }
 
@@ -19,12 +21,24 @@ Graph.defineLines = function (d, dots) {
     var lines = new Set();
 
     for (var di of Graph.getRelatedDots(d, dots)) {
-        // todo: don't add duplicated lines,
-        //       e.g. "{d2, d1}" if "{d1, d2}" already exists
         lines.add(new Set([d, di]));
     }
 
     return lines;
+};
+
+Graph.hasLine = function (l, lines) {
+    for (var li of lines) {
+        var matched = 0;
+
+        for (var dj of l) {
+            matched += li.has(dj);
+        }
+
+        if (matched === 2) { return true; }
+    }
+
+    return false;
 };
 
 Graph.getRelatedDots = function (d, dots) {

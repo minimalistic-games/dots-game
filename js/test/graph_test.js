@@ -2,6 +2,10 @@ var expect = require('chai').expect;
 
 var Graph = require('../graph');
 
+var linesToArray = function (lines) {
+    return Array.from(lines).map(function (s) { return Array.from(s); });
+};
+
 describe('Graph', function () {
     it('checks if two dots are related', function () {
         expect(Graph.areRelatedDots([0, 0], [0, 0])).to.equal(false);
@@ -26,11 +30,22 @@ describe('Graph', function () {
 
     it('adds dots', function () {
         var graph = new Graph();
+
         expect(Array.from(graph.dots)).to.eql([]);
+        expect(linesToArray(graph.lines)).to.eql([]);
+
         graph.add([0, 0]);
         expect(Array.from(graph.dots)).to.eql([[0, 0]]);
+        expect(linesToArray(graph.lines)).to.eql([]);
+
         graph.add([0, 1]);
         expect(Array.from(graph.dots)).to.eql([[0, 0], [0, 1]]);
-        // todo: add expectations for "graph.lines"
+        expect(linesToArray(graph.lines)).to.eql([[[0, 1], [0, 0]]]);
+
+        graph.add([1, 1]);
+        expect(Array.from(graph.dots)).to.eql([[0, 0], [0, 1], [1, 1]]);
+        expect(linesToArray(graph.lines)).to.eql([[[0, 1], [0, 0]],
+                                                  [[1, 1], [0, 0]],
+                                                  [[1, 1], [0, 1]]]);
     });
 });
