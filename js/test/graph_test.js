@@ -48,4 +48,20 @@ describe('Graph', function () {
                                                   [[1, 1], [0, 0]],
                                                   [[1, 1], [0, 1]]]);
     });
+
+    it('merges graphs', function () {
+        var graphs = new Set([new Graph([[0, 0]]),
+                              new Graph([[0, 1], [1, 1]]),
+                              new Graph([[1, 2]])]);
+        var merged = Graph.merge(graphs);
+        expect(Array.from(merged.dots)).to.eql([[0, 0],
+                                                [0, 1],
+                                                [1, 1],
+                                                [1, 2]]);
+        expect(linesToArray(merged.lines)).to.eql([[[0, 0], [0, 1]],
+                                                   [[0, 0], [1, 1]],
+                                                   [[0, 1], [1, 1]],
+                                                   [[0, 1], [1, 2]],
+                                                   [[1, 1], [1, 2]]]);
+    });
 });

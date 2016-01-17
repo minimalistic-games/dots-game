@@ -11,8 +11,8 @@ Field.prototype.maxCellSize = 100;
 Field.prototype.nextPlayer = 'red';
 
 Field.prototype.initPlayers = function () {
-    return {'red': [new Graph()],
-            'blue': [new Graph()]};
+    return {'red': new Set(),
+            'blue': new Set()};
 };
 
 Field.prototype.load = function () {
@@ -23,7 +23,7 @@ Field.prototype.load = function () {
 
     if (playersData) {
         for (var player in playersData) {
-            this.players[player] = playersData[player].map(graphFromData);
+            this.players[player] = new Set(playersData[player].map(graphFromData));
         }
     } else {
         this.players = this.initPlayers();
@@ -40,16 +40,20 @@ Field.prototype.save = function () {
     };
 
     for (var player in this.players) {
-        playersData[player] = this.players[player].map(dataFromGraph);
+        playersData[player] = Array.from(this.players[player]).map(dataFromGraph);
     }
 
     localStorage.setItem('players', JSON.stringify(playersData));
 };
 
 Field.prototype.getPlayerDotsNumber = function (player) {
-    return this.players[player].reduce(function (sum, graph) {
-        return sum + graph.dots.size;
-    }, 0);
+    var dotsNumber = 0;
+
+    for (var graph of this.players[player]) {
+        dotsNumber += graph.dots.size;
+    }
+
+    return dotsNumber;
 };
 
 Field.prototype.render = function () {
@@ -106,19 +110,19 @@ Field.prototype.drawLines = function () {
 Field.prototype.drawPlayerDots = function (player) {
     var color = this.view.getColor(player, 1);
 
-    this.players[player].forEach(function (graph) {
+    for (var graph of this.players[player]) {
         for (var coords of graph.dots) {
             this.view.drawDot(color,
                               this.getDotRadius(),
                               coords.map(this.scaleCoord, this));
         }
-    }, this);
+    }
 };
 
 Field.prototype.drawPlayerLines = function (player) {
     var color = this.view.getColor(player, 0.8);
 
-    this.players[player].forEach(function (graph) {
+    for (var graph of this.players[player]) {
         for (var line of graph.lines) {
             var dots = Array.from(line);
 
@@ -127,7 +131,7 @@ Field.prototype.drawPlayerLines = function (player) {
                                dots[0].map(this.scaleCoord, this),
                                dots[1].map(this.scaleCoord, this));
         }
-    }, this);
+    }
 };
 
 Field.prototype.scaleCoord = function (coord) {
@@ -190,10 +194,8 @@ Field.prototype.hasDot = function (coords) {
     };
 
     for (var player in this.players) {
-        var playerGraphs = this.players[player];
-
-        for (var graphIndex in playerGraphs) {
-            if (Array.from(playerGraphs[graphIndex].dots).find(equals)) {
+        for (var graph of this.players[player]) {
+            if (Array.from(graph.dots).find(equals)) {
                 return true;
             }
         }
@@ -204,21 +206,33 @@ Field.prototype.hasDot = function (coords) {
 
 Field.prototype.placeDot = function (coords) {
     var playerGraphs = this.players[this.nextPlayer];
+    var relatedGraphs = new Set();
 
-    for (var graphIndex in playerGraphs) {
-        var graph = playerGraphs[graphIndex];
-
-        if (graph.isNear(coords)) {
-            graph.add(coords);
-            // todo: check other graphs and merge if current dot connects those
-            return;
+    for (var graph of playerGraphs) {
+        if (graph.isRelated(coords)) {
+            relatedGraphs.add(graph);
         }
     }
 
-    var newGraph = new Graph();
+    if (!relatedGraphs.size) {
+        var newGraph = new Graph();
+        newGraph.add(coords);
+        playerGraphs.add(newGraph);
+        return;
+    }
 
-    newGraph.add(coords);
-    playerGraphs.push(newGraph);
+    if (relatedGraphs.size === 1) {
+        graph.add(coords);
+        return;
+    }
+
+    for (var relatedGraph of relatedGraphs) {
+        playerGraphs.delete(relatedGraph);
+    }
+
+    var mergedGraph = Graph.merge(relatedGraphs);
+    mergedGraph.add(coords);
+    playerGraphs.add(mergedGraph);
 };
 
 Field.prototype.getClosestGridLinesIntersection = function (coords) {

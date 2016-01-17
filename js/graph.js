@@ -60,6 +60,20 @@ Graph.areRelatedDots = function (d1, d2) {
     return true;
 };
 
+Graph.merge = function (graphs) {
+    var merged = new Graph();
+
+    for (var graph of graphs) {
+        for (var di of graph.dots) {
+            merged.dots.add(di);
+        }
+    }
+
+    merged.lines = Graph.defineAllLines(merged.dots);
+
+    return merged;
+};
+
 Graph.prototype.add = function (d) {
     for (var li of Graph.defineLines(d, this.dots)) {
         this.lines.add(li);
@@ -68,7 +82,7 @@ Graph.prototype.add = function (d) {
     this.dots.add(d);
 };
 
-Graph.prototype.isNear = function (d) {
+Graph.prototype.isRelated = function (d) {
     if (!this.dots.size) { return true; }
     return Boolean(Graph.getRelatedDots(d, this.dots).size);
 };

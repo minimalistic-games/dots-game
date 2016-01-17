@@ -1,7 +1,5 @@
 var View = function (ctx) {
     this.ctx = ctx;
-    this.ctx.font = '8px monospace';
-    this.ctx.textBaseline = 'top';
 
     this.colors = {'black': [0, 0, 0],
                    'red': [192, 32, 0],

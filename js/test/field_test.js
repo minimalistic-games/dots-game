@@ -2,6 +2,7 @@ var expect = require('chai').expect;
 var sinon = require('sinon');
 
 var View = require('../view');
+var Graph = require('../graph');
 var Field = require('../field');
 
 describe('Field', function () {
@@ -38,15 +39,21 @@ describe('Field', function () {
 
     it('detects if dot is present', function () {
         var field = new Field({});
+        var graph = new Graph();
+        field.players.red.add(graph);
         expect(field.hasDot([0, 0])).to.equal(false);
-        field.players.red[0].dots.add([0, 0]);
+        graph.dots.add([0, 0]);
         expect(field.hasDot([0, 0])).to.equal(true);
     });
 
     it('calculates gots number per player', function () {
         var field = new Field({});
+        var graph = new Graph();
+        field.players.red.add(graph);
         expect(field.getPlayerDotsNumber('red')).to.equal(0);
-        field.players.red[0].dots.add([0, 0]);
+        graph.dots.add([0, 0]);
         expect(field.getPlayerDotsNumber('red')).to.equal(1);
+        graph.dots.add([0, 1]);
+        expect(field.getPlayerDotsNumber('red')).to.equal(2);
     });
 });
