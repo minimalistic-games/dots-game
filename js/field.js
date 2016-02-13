@@ -85,6 +85,7 @@ Field.prototype.drawGrid = function () {
             var to = [size, offset];
 
             this.view.drawLine(color,
+                               false,
                                1,
                                axis ? from.reverse() : from,
                                axis ? to.reverse() : to);
@@ -127,6 +128,7 @@ Field.prototype.drawPlayerLines = function (player) {
             var dots = Array.from(line);
 
             this.view.drawLine(color,
+                               true,
                                2,
                                dots[0].map(this.scaleCoord, this),
                                dots[1].map(this.scaleCoord, this));

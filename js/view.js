@@ -26,12 +26,13 @@ View.prototype.clear = function () {
                        this.ctx.canvas.height);
 };
 
-View.prototype.drawLine = function (style, lineWidth, from, to) {
+View.prototype.drawLine = function (color, dashed, lineWidth, from, to) {
+    this.ctx.setLineDash(dashed ? [2, 4] : []);
     this.ctx.beginPath();
     this.ctx.moveTo(from[0], from[1]);
     this.ctx.lineTo(to[0], to[1]);
     this.ctx.lineWidth = lineWidth;
-    this.ctx.strokeStyle = style;
+    this.ctx.strokeStyle = color;
     this.ctx.stroke();
 };
 
