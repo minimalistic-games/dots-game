@@ -222,7 +222,7 @@ Field.prototype.placeDot = function (coords) {
     }
 
     if (relatedGraphs.size === 1) {
-        graph.add(coords);
+        Array.from(relatedGraphs)[0].add(coords);
         return;
     }
 
