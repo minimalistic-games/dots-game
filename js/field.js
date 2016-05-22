@@ -1,3 +1,5 @@
+/* global localStorage */
+
 var Graph = require('./graph');
 
 var Field = function (view, cellSize) {
@@ -156,7 +158,7 @@ Field.prototype.clearOnKeyDown = function (e) {
 Field.prototype.zoomOnScroll = function (e) {
     if (!e.deltaY) { return; }
 
-    var newCellSize = this.cellSize * (1 - 0.05 * Math.sign(e.deltaY)) ;
+    var newCellSize = this.cellSize * (1 - 0.05 * Math.sign(e.deltaY));
 
     if (newCellSize > this.minCellSize && newCellSize < this.maxCellSize) {
         this.cellSize = newCellSize;
@@ -183,7 +185,7 @@ Field.prototype.placeDotOnClick = function (e) {
 
     if (linesIntersection && !this.hasDot(linesIntersection)) {
         this.placeDot(linesIntersection);
-        this.nextPlayer = this.nextPlayer == 'red' ? 'blue' : 'red';
+        this.nextPlayer = this.nextPlayer === 'red' ? 'blue' : 'red';
         this.render();
         this.save();
     }

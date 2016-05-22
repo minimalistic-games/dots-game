@@ -2,7 +2,7 @@
 
 [![Build Status](https://api.travis-ci.org/oleksmarkh/dots-game.svg)](https://travis-ci.org/oleksmarkh/dots-game)
 [![Dependency Status](https://david-dm.org/oleksmarkh/dots-game.svg?style=flat)](https://david-dm.org/oleksmarkh/dots-game)
-[![Coverage Status](https://coveralls.io/repos/oleksmarkh/dots-game/badge.svg)](https://coveralls.io/r/oleksmarkh/dots-game)
+[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com)
 
 html5 version of a classic paper-based [game](https://en.wikipedia.org/wiki/Dots_(game))
 
@@ -23,5 +23,4 @@ html5 version of a classic paper-based [game](https://en.wikipedia.org/wiki/Dots
 - [x] autosave
 - [ ] moves history/replay
 - [ ] offline mode for 2 players
-- [ ] AI
 - [ ] online multiplayer (via WebRTC)

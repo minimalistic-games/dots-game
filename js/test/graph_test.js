@@ -1,3 +1,6 @@
+/* eslint no-multi-spaces: "off" */
+/* global describe, it */
+
 var expect = require('chai').expect;
 
 var Graph = require('../graph');
