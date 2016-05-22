@@ -51,7 +51,8 @@ describe('Graph', () => {
 
         graph.add([0, 1]);
         expect(Array.from(graph.dots)).to.eql([
-            [0, 0], [0, 1]
+            [0, 0],
+            [0, 1]
         ]);
         expect(linesToArray(graph.lines)).to.eql([
             [
