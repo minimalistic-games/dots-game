@@ -6,7 +6,7 @@
   "scripts": {
     "build": "browserify ./js/main.js --debug -o bundle.js",
     "lint": "eslint ./js",
-    "test": "mocha --compilers babel-core/register --reporter spec ./js/test"
+    "test": "mocha --compilers js:babel-core/register --reporter spec ./js/test"
   },
   "repository": {
     "type": "git",

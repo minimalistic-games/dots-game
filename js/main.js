@@ -1,8 +1,10 @@
-var View = require('./view');
-var Field = require('./field');
+import View from './view';
+import Field from './field';
 
-var field = new Field(new View(document.querySelector('canvas').getContext('2d')),
-                      40);
+const field = new Field(
+    new View(document.querySelector('canvas').getContext('2d')),
+    40
+);
 
 field.load();
 field.render();
