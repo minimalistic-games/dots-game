@@ -22,11 +22,11 @@
   "homepage": "https://github.com/oleksmarkh/dots-game",
   "devDependencies": {
     "browserify": "^13.0.0",
-    "chai": "^3.4.1",
-    "coveralls": "^2.11.4",
-    "istanbul": "^0.4.0",
+    "chai": "^3.5.0",
+    "coveralls": "^2.11.9",
+    "istanbul": "^0.4.3",
     "jshint": "2.9.1",
-    "mocha": "^2.3.3",
-    "sinon": "^1.17.2"
+    "mocha": "^2.4.5",
+    "sinon": "^1.17.4"
   }
 }
