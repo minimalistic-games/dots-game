@@ -3,9 +3,9 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
 
-import View from '../view';
-import Graph from '../graph';
-import Field from '../field';
+import View from '../View';
+import Graph from '../Graph';
+import Field from '../Field';
 
 describe('Field', () => {
     it('draws proper number of lines while drawing a grid', () => {

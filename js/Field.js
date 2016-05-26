@@ -1,6 +1,6 @@
 /* global localStorage */
 
-import Graph from './graph';
+import Graph from './Graph';
 
 export default class Field {
     constructor(view, cellSize) {

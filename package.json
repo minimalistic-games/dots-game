@@ -2,11 +2,12 @@
   "name": "dots-game",
   "version": "1.0.0",
   "description": "html5 version of a classic paper-based game",
-  "main": "index.js",
+  "main": "bundle.js",
   "scripts": {
-    "build": "browserify ./js/main.js --debug -o bundle.js",
+    "build": "webpack -d --progress",
+    "build:watch": "webpack -d --watch",
     "lint": "eslint ./js",
-    "test": "mocha --compilers js:babel-core/register --reporter spec ./js/test"
+    "test": "mocha --compilers js:./test-compiler.js --reporter spec ./js/test"
   },
   "repository": {
     "type": "git",

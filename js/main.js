@@ -1,5 +1,5 @@
-import View from './view';
-import Field from './field';
+import View from './View';
+import Field from './Field';
 
 const field = new Field(
     new View(document.querySelector('canvas').getContext('2d')),

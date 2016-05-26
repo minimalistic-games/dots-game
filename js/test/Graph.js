@@ -3,7 +3,7 @@
 
 import { expect } from 'chai';
 
-import Graph from '../graph';
+import Graph from '../Graph';
 
 function linesToArray(lines) {
     return Array.from(lines).map((s) => Array.from(s));
