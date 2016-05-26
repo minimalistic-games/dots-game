@@ -26,8 +26,6 @@ export default class Field {
             for (let player in playersData) {
                 this.players[player] = new Set(playersData[player].map((graphData) => new Graph(graphData)));
             }
-        } else {
-            this.players = this.initPlayers();
         }
 
         this.nextPlayer = this.getPlayerDotsNumber('red') > this.getPlayerDotsNumber('blue')
@@ -149,6 +147,7 @@ export default class Field {
     }
 
     clearOnKeyDown(e) {
+        // Alt+C
         if (!e.altKey || e.keyCode !== 67) { return; }
 
         this.players = this.initPlayers();

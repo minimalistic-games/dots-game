@@ -1,13 +1,54 @@
-/* global describe, it */
+/* global describe, it, localStorage */
 
 import { expect } from 'chai';
-import sinon from 'sinon';
+import { spy, stub } from 'sinon';
 
 import View from '../View';
 import Graph from '../Graph';
 import Field from '../Field';
 
 describe('Field', () => {
+    it('loads players data from "localStorage"', () => {
+        stub(localStorage, 'getItem').withArgs('players').returns(
+            '{"red":[[[8,1],[8,2],[9,3]]],"blue":[[[7,2]],[[7,4]]]}'
+        );
+
+        const field = new Field({});
+        expect(field.players.red.size).to.equal(0);
+        expect(field.players.blue.size).to.equal(0);
+        expect(field.nextPlayer).to.equal('red');
+
+        field.load();
+        expect(field.players.red.size).to.equal(1);
+        expect(field.players.blue.size).to.equal(2);
+        expect(field.nextPlayer).to.equal('blue');
+
+        localStorage.getItem.restore();
+    });
+
+    it('saves players data to "localStorage"', () => {
+        spy(localStorage, 'setItem');
+
+        const field = new Field({});
+        field.save();
+        expect(localStorage.setItem.getCall(0).args[0]).to.be.equal('players');
+        expect(localStorage.setItem.getCall(0).args[1]).to.be.equal('{"red":[],"blue":[]}');
+
+        const graph = new Graph();
+        field.players.red.add(graph);
+        graph.dots.add([0, 0]);
+        field.save();
+        expect(localStorage.setItem.getCall(1).args[0]).to.be.equal('players');
+        expect(localStorage.setItem.getCall(1).args[1]).to.be.equal('{"red":[[[0,0]]],"blue":[]}');
+
+        graph.dots.add([0, 1]);
+        field.save();
+        expect(localStorage.setItem.getCall(2).args[0]).to.be.equal('players');
+        expect(localStorage.setItem.getCall(2).args[1]).to.be.equal('{"red":[[[0,0],[0,1]]],"blue":[]}');
+
+        localStorage.setItem.restore();
+    });
+
     it('draws proper number of lines while drawing a grid', () => {
         const view600x600 = new View({
             canvas: {
@@ -16,8 +57,8 @@ describe('Field', () => {
             }
         });
         const field600x600 = new Field(view600x600, 40);
-        View.prototype.drawLine = sinon.spy();
-        View.prototype.drawStrokeRect = sinon.spy();
+        View.prototype.drawLine = spy();
+        View.prototype.drawStrokeRect = spy();
         field600x600.drawGrid();
         expect(view600x600.drawLine.callCount).to.equal(32);
         expect(view600x600.drawStrokeRect.callCount).to.equal(1);
@@ -29,8 +70,8 @@ describe('Field', () => {
             }
         });
         const field300x200 = new Field(view300x200, 40);
-        View.prototype.drawLine = sinon.spy();
-        View.prototype.drawStrokeRect = sinon.spy();
+        View.prototype.drawLine = spy();
+        View.prototype.drawStrokeRect = spy();
         field300x200.drawGrid();
         expect(view300x200.drawLine.callCount).to.equal(14);
         expect(view300x200.drawStrokeRect.callCount).to.equal(1);

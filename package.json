@@ -7,7 +7,7 @@
     "build": "webpack -d --progress",
     "build:watch": "webpack -d --watch",
     "lint": "eslint ./js",
-    "test": "mocha --compilers js:./test-compiler.js --reporter spec ./js/test"
+    "test": "mocha --compilers js:./js/test/_compiler.js --require ./js/test/_setup.js --reporter spec ./js/test"
   },
   "repository": {
     "type": "git",
