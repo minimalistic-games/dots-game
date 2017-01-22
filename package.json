@@ -33,6 +33,7 @@
     "webpack": "^1.14.0"
   },
   "dependencies": {
+    "hidpi-canvas": "^1.0.10",
     "lodash": "^4.17.4"
   }
 }
