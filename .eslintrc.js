@@ -1,13 +1,12 @@
 module.exports = {
-    extends: 'standard',
-    plugins: [
-        'standard'
-    ],
-    rules: {
-        'indent': ['error', 4, {'SwitchCase': 1}],
-        'semi': ['error', 'always'],
-        'no-var': 'error',
-        'prefer-arrow-callback': 'error',
-        'space-before-function-paren': ['error', { 'anonymous': 'always', 'named': 'never' }]
-    }
+  extends: 'airbnb-base',
+  env: {
+    "browser": true
+  },
+  rules: {
+    "arrow-parens": ["error", "always"],
+    "comma-dangle": ["error", "never"],
+    "no-mixed-operators": ["off"],
+    "no-restricted-syntax": ["off"]
+  }
 };

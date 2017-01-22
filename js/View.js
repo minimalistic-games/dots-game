@@ -1,68 +1,68 @@
 export default class View {
-    constructor(ctx) {
-        this.ctx = ctx;
+  constructor(ctx) {
+    this.ctx = ctx;
 
-        this.colors = {
-            black: [0, 0, 0],
-            red: [192, 32, 0],
-            blue: [0, 32, 192]
-        };
-    }
+    this.colorCodes = {
+      black: [0, 0, 0],
+      red: [192, 32, 0],
+      blue: [0, 32, 192]
+    };
+  }
 
-    getColor(colorName, opacity) {
-        return `rgba(${this.colors[colorName].concat(opacity).join(',')})`;
-    }
+  getColorCode(color, opacity) {
+    return `rgba(${this.colorCodes[color].concat(opacity).join(',')})`;
+  }
 
-    listenTo(e, callback) {
-        this.ctx.canvas.addEventListener(e, callback);
-    }
+  listenTo(e, callback) {
+    this.ctx.canvas.addEventListener(e, callback);
+  }
 
-    getDimensions() {
-        return [
-            this.ctx.canvas.width,
-            this.ctx.canvas.height
-        ];
-    }
+  getDimensions() {
+    return [
+      this.ctx.canvas.width,
+      this.ctx.canvas.height
+    ];
+  }
 
-    clear() {
-        this.ctx.clearRect(
-            0,
-            0,
-            this.ctx.canvas.width,
-            this.ctx.canvas.height
-        );
-    }
+  clear() {
+    this.ctx.clearRect(
+      0,
+      0,
+      this.ctx.canvas.width,
+      this.ctx.canvas.height
+    );
+  }
 
-    drawLine(color, dashed, lineWidth, from, to) {
-        this.ctx.setLineDash(dashed ? [2, 4] : []);
-        this.ctx.beginPath();
-        this.ctx.moveTo(from[0], from[1]);
-        this.ctx.lineTo(to[0], to[1]);
-        this.ctx.lineWidth = lineWidth;
-        this.ctx.strokeStyle = color;
-        this.ctx.stroke();
-    }
+  drawLine(color, dashed, lineWidth, from, to) {
+    this.ctx.setLineDash(dashed ? [2, 4] : []);
+    this.ctx.beginPath();
+    this.ctx.moveTo(from[0], from[1]);
+    this.ctx.lineTo(to[0], to[1]);
+    this.ctx.lineWidth = lineWidth;
+    this.ctx.strokeStyle = color;
+    this.ctx.stroke();
+  }
 
-    drawStrokeRect(from, to) {
-        this.ctx.strokeRect(
-            from[0],
-            from[1],
-            to[0] - from[0],
-            to[1] - from[1]
-        );
-    }
+  drawStrokeRect(from, to) {
+    this.ctx.strokeRect(
+      from[0],
+      from[1],
+      to[0] - from[0],
+      to[1] - from[1]
+    );
+  }
 
-    drawDot(style, radius, coords) {
-        this.ctx.beginPath();
-        this.ctx.arc(
-            coords[0],
-            coords[1],
-            radius,
-            0,
-            2 * Math.PI,
-            false
-        );
-        this.ctx.fillStyle = style;
-        this.ctx.fill();
-    }
+  drawDot(style, radius, coords) {
+    this.ctx.beginPath();
+    this.ctx.arc(
+      coords[0],
+      coords[1],
+      radius,
+      0,
+      2 * Math.PI,
+      false
+    );
+    this.ctx.fillStyle = style;
+    this.ctx.fill();
+  }
 }

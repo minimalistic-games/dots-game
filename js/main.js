@@ -1,10 +1,9 @@
 import View from './View';
 import Field from './Field';
 
-const field = new Field(
-    new View(document.querySelector('canvas').getContext('2d')),
-    40
-);
+const view = new View(document.querySelector('canvas').getContext('2d'));
+const cellSize = 40;
+const field = new Field(view, cellSize);
 
 field.load();
 field.render();
