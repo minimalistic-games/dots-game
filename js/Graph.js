@@ -3,8 +3,8 @@ export default class Graph {
     const lines = new Set();
 
     for (const di of dots) {
-      for (const lj of Graph.defineLines(di, dots)) {
-        if (!Graph.hasLine(lj, lines)) {
+      for (const lj of this.defineLines(di, dots)) {
+        if (!this.hasLine(lj, lines)) {
           lines.add(lj);
         }
       }
@@ -16,7 +16,7 @@ export default class Graph {
   static defineLines(d, dots) {
     const lines = new Set();
 
-    for (const di of Graph.getRelatedDots(d, dots)) {
+    for (const di of this.getRelatedDots(d, dots)) {
       lines.add(new Set([d, di]));
     }
 
@@ -41,7 +41,7 @@ export default class Graph {
     const relatedDots = new Set();
 
     for (const di of dots) {
-      if (Graph.areRelatedDots(d, di)) {
+      if (this.areRelatedDots(d, di)) {
         relatedDots.add(di);
       }
     }
@@ -65,18 +65,18 @@ export default class Graph {
       }
     }
 
-    merged.lines = Graph.defineAllLines(merged.dots);
+    merged.lines = this.defineAllLines(merged.dots);
 
     return merged;
   }
 
   constructor(dots) {
     this.dots = new Set(dots || []);
-    this.lines = Graph.defineAllLines(this.dots);
+    this.lines = this.constructor.defineAllLines(this.dots);
   }
 
   add(d) {
-    for (const li of Graph.defineLines(d, this.dots)) {
+    for (const li of this.constructor.defineLines(d, this.dots)) {
       this.lines.add(li);
     }
 
@@ -85,6 +85,6 @@ export default class Graph {
 
   isRelated(d) {
     if (!this.dots.size) { return true; }
-    return Boolean(Graph.getRelatedDots(d, this.dots).size);
+    return Boolean(this.constructor.getRelatedDots(d, this.dots).size);
   }
 }
