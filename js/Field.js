@@ -70,7 +70,7 @@ export default class Field {
 
   drawGrid() {
     const dimensions = this.view.getDimensions();
-    const colorCode = this.view.getColorCode('black', 0.8);
+    const colorCode = this.view.getColorCode('black', 0.4);
 
     [0, 1].forEach((axis) => {
       const size = dimensions[axis];
@@ -83,7 +83,7 @@ export default class Field {
 
         this.view.drawLine(
           colorCode,
-          false,
+          i % 5,
           1,
           axis ? from.reverse() : from,
           axis ? to.reverse() : to
@@ -117,9 +117,11 @@ export default class Field {
   }
 
   drawPlayerLines(graphs, color) {
-    const colorCode = this.view.getColorCode(color, 0.8);
+    const colorCode = this.view.getColorCode(color, 0.6);
 
     for (const graph of graphs) {
+      // @todo: draw only cycles, not all the lines
+
       for (const line of graph.lines) {
         const dots = Array.from(line);
 
@@ -139,7 +141,7 @@ export default class Field {
   }
 
   getDotRadius() {
-    return Math.max(this.cellSize / 5, 4);
+    return Math.max(this.cellSize / 8, 2);
   }
 
   clearOnKeyDown(e) {
@@ -207,6 +209,7 @@ export default class Field {
   placeDot(coords) {
     const playerGraphs = this.players[this.nextPlayer];
     const relatedGraphs = new Set();
+    let parentGraph = null;
 
     for (const graph of playerGraphs) {
       if (graph.isRelated(coords)) {
@@ -214,25 +217,36 @@ export default class Field {
       }
     }
 
-    if (!relatedGraphs.size) {
-      const newGraph = new Graph();
-      newGraph.add(coords);
-      playerGraphs.add(newGraph);
-      return;
+    switch (relatedGraphs.size) {
+      case 0: {
+        const newGraph = new Graph();
+        newGraph.add(coords);
+        playerGraphs.add(newGraph);
+        break;
+      }
+
+      case 1: {
+        Array.from(relatedGraphs)[0].add(coords);
+        parentGraph = relatedGraphs.values().next().value;
+        break;
+      }
+
+      default: {
+        for (const relatedGraph of relatedGraphs) {
+          playerGraphs.delete(relatedGraph);
+        }
+
+        const mergedGraph = Graph.merge(relatedGraphs);
+        mergedGraph.add(coords);
+        playerGraphs.add(mergedGraph);
+
+        parentGraph = mergedGraph;
+      }
     }
 
-    if (relatedGraphs.size === 1) {
-      Array.from(relatedGraphs)[0].add(coords);
-      return;
+    if (parentGraph) {
+      parentGraph.defineCycles();
     }
-
-    for (const relatedGraph of relatedGraphs) {
-      playerGraphs.delete(relatedGraph);
-    }
-
-    const mergedGraph = Graph.merge(relatedGraphs);
-    mergedGraph.add(coords);
-    playerGraphs.add(mergedGraph);
   }
 
   getClosestGridLinesIntersection(coords) {
