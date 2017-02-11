@@ -88,7 +88,7 @@ export default class Graph {
     return Boolean(this.constructor.getRelatedDots(d, this.dots).size);
   }
 
-  defineCycles() {
-    // @see https://en.wikipedia.org/wiki/Depth-first_search
-  }
+  // defineCycles() {
+  //   // @see https://en.wikipedia.org/wiki/Depth-first_search
+  // }
 }

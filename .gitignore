@@ -1,6 +1,5 @@
-node_modules
-coverage
+node_modules/
+coverage/
+dist/
 *.sublime-*
 *.log
-*.map
-bundle.js

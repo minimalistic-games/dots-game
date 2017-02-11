@@ -14,8 +14,31 @@ html5 version of a classic paper-based [game](https://en.wikipedia.org/wiki/Dots
   x    x   x     x     x         x
   x x x     x x x      x      x x
 ------------------------------------
+
+· · · · · · · · ·
+· · · · · ● ● · ·
+· · · · ● · · ● ·
+· · · · ● · · ● ·
+· · ● ● · ● ○ ● ·
+· ● · ○ ○ ○ ● ○ ·
+· ● · ○ ○ · ● ○ ·
+· · ● ● ● ● ● ○ ·
+· · · · · · · · ·
 ```
 
+## setup
+
+```bash
+$ npm i
+$ npm run dev    # runs a dev server on "http://localhost:8080"
+$ npm run build  # builds production assets to "./dist/"
+```
+
+test:
+
+```bash
+$ npm test
+```
 
 ## features/todo
 

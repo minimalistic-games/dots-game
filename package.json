@@ -1,13 +1,15 @@
 {
   "name": "dots-game",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "html5 version of a classic paper-based game",
-  "main": "bundle.js",
+  "main": "src/app.js",
   "scripts": {
-    "build": "webpack -d --progress",
-    "build:watch": "webpack -d --watch",
-    "lint": "eslint ./js",
-    "test": "mocha --compilers js:./js/test/_compiler.js --require ./js/test/_setup.js --reporter spec ./js/test"
+    "lint": "eslint ./src/",
+    "test": "mocha --compilers js:./src/test/_compiler.js --require ./src/test/_setup.js --reporter spec ./src/test",
+    "dev": "webpack-dev-server --progress --colors",
+    "clean": "rm -rf dist/*",
+    "prebuild": "npm run clean && npm run lint && npm run test",
+    "build": "export NODE_ENV=production && webpack --progress --colors --bail"
   },
   "repository": {
     "type": "git",
@@ -23,14 +25,20 @@
     "babel-core": "^6.22.1",
     "babel-loader": "^6.2.10",
     "babel-preset-es2015": "^6.22.0",
+    "babel-preset-stage-2": "^6.22.0",
     "chai": "^3.5.0",
-    "eslint": "^3.14.0",
-    "eslint-config-airbnb-base": "^11.0.1",
+    "css-loader": "^0.26.1",
+    "eslint": "^3.15.0",
+    "eslint-config-airbnb-base": "^11.1.0",
     "eslint-loader": "^1.6.1",
     "eslint-plugin-import": "^2.2.0",
+    "extract-text-webpack-plugin": "^2.0.0-rc.3",
+    "html-webpack-plugin": "^2.28.0",
     "mocha": "^3.2.0",
     "sinon": "^1.17.7",
-    "webpack": "^1.14.0"
+    "style-loader": "^0.13.1",
+    "webpack": "^2.2.1",
+    "webpack-dev-server": "^2.3.0"
   },
   "dependencies": {
     "hidpi-canvas": "^1.0.10",

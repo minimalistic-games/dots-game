@@ -245,7 +245,7 @@ export default class Field {
     }
 
     if (parentGraph) {
-      parentGraph.defineCycles();
+      // parentGraph.defineCycles();
     }
   }
 

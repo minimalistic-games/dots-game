@@ -1,5 +1,7 @@
 import 'hidpi-canvas/dist/hidpi-canvas.min';
 
+import './app.css';
+
 import View from './View';
 import Field from './Field';
 
