@@ -2,7 +2,6 @@
 
 [![Build Status](https://api.travis-ci.org/oleksmarkh/dots-game.svg)](https://travis-ci.org/oleksmarkh/dots-game)
 [![Dependency Status](https://david-dm.org/oleksmarkh/dots-game.svg?style=flat)](https://david-dm.org/oleksmarkh/dots-game)
-[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com)
 
 html5 version of a classic paper-based [game](https://en.wikipedia.org/wiki/Dots_(game))
 

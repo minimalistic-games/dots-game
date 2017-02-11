@@ -41,7 +41,6 @@
     "webpack-dev-server": "^2.3.0"
   },
   "dependencies": {
-    "hidpi-canvas": "^1.0.10",
-    "lodash": "^4.17.4"
+    "hidpi-canvas": "^1.0.10"
   }
 }
