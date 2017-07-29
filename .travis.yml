@@ -5,8 +5,8 @@ node_js:
     - "stable"
 
 install:
-    - npm install
+    - yarn install
 
 script:
-    - npm run lint
-    - npm test
+    - yarn run lint
+    - yarn test

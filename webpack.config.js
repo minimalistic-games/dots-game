@@ -1,7 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const IS_PROD = process.env.NODE_ENV === 'production';
 
@@ -59,7 +59,8 @@ const config = {
   },
 
   devServer: {
-    contentBase: DIST_DIR
+    contentBase: DIST_DIR,
+    hot: true
   },
 
   plugins: [
@@ -80,9 +81,13 @@ if (IS_PROD) {
       compress: {
         warnings: false
       }
-    }),
+    })
   ]);
 } else {
+  config.plugins = config.plugins.concat([
+    new webpack.HotModuleReplacementPlugin()
+  ]);
+
   config.devtool = 'inline-source-map';
 }
 

@@ -28,15 +28,15 @@ html5 version of a classic paper-based [game](https://en.wikipedia.org/wiki/Dots
 ## setup
 
 ```bash
-$ npm i
-$ npm run dev    # runs a dev server on "http://localhost:8080"
-$ npm run build  # builds production assets to "./dist/"
+$ yarn install
+$ yarn run server:dev  # runs a dev server on "http://localhost:8080"
+$ yarn run build       # builds production assets to "./dist/"
 ```
 
 test:
 
 ```bash
-$ npm test
+$ yarn test
 ```
 
 ## features/todo
