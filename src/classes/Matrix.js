@@ -11,20 +11,20 @@ export default class Matrix {
     this.spots = dots || [];
   }
 
-  placeDot(coords, color) {
-    if (!Array.isArray(this.spots[coords[0]])) {
-      this.spots[coords[0]] = [];
+  placeDot([x, y], color) {
+    if (!Array.isArray(this.spots[x])) {
+      this.spots[x] = [];
     }
 
-    this.spots[coords[0]][coords[1]] = color;
+    this.spots[x][y] = color;
   }
 
-  hasDot(coords) {
-    if (!Array.isArray(this.spots[coords[0]])) {
+  hasDot([x, y]) {
+    if (!Array.isArray(this.spots[x])) {
       return false;
     }
 
-    return Boolean(this.spots[coords[0]][coords[1]]);
+    return Boolean(this.spots[x][y]);
   }
 
   getDots() {

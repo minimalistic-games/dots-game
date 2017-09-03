@@ -3,9 +3,9 @@ export default class View {
     this.ctx = ctx;
 
     this.colorCodes = {
-      black: [0, 0, 0],
-      red: [192, 32, 0],
-      blue: [0, 32, 192]
+      white: [255, 255, 255],
+      red: [192, 64, 0],
+      blue: [0, 64, 192]
     };
   }
 

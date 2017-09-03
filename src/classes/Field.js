@@ -36,7 +36,7 @@ export default class Field {
 
   drawGrid() {
     const dimensions = this.view.getDimensions();
-    const colorCode = this.view.getColorCode('black', 0.4);
+    const colorCode = this.view.getColorCode('white', 0.6);
 
     [0, 1].forEach((axis) => {
       const size = dimensions[axis];
@@ -89,8 +89,8 @@ export default class Field {
 
     this.matrix.reset();
     this.nextPlayer = 'red';
-    this.save();
     this.render();
+    this.save();
   }
 
   zoomOnScroll(e) {
