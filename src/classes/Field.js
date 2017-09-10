@@ -24,6 +24,7 @@ export default class Field {
     this.view.clear();
     this.drawGrid();
     this.drawDots();
+    this.drawZones();
   }
 
   subscribe() {
@@ -68,11 +69,48 @@ export default class Field {
 
     const dotRadius = this.getDotRadius();
 
-    this.matrix.getDots().forEach(({ coords, color }) => this.view.drawDot(
-      colorCodes[color],
-      dotRadius,
-      coords.map(this.scaleCoord, this)
-    ));
+    this.matrix.getAllDots().forEach(({ coords, color }) => {
+      this.view.drawDot(
+        colorCodes[color],
+        dotRadius,
+        coords.map(this.scaleCoord, this)
+      );
+
+      this.view.drawDotCoords(
+        colorCodes[color],
+        dotRadius,
+        coords.map(this.scaleCoord, this),
+        coords
+      );
+    });
+  }
+
+  drawZones() {
+    const lineWidth = this.getLineWidth();
+
+    ['red', 'blue'].forEach((color) => {
+      const colorCode = this.view.getColorCode(color, 0.6);
+
+      this.matrix.zones[color].forEach((zone) => {
+        for (let i = 1; i < zone.length; i += 1) {
+          this.view.drawLine(
+            colorCode,
+            false,
+            lineWidth,
+            zone[i - 1].coords.map(this.scaleCoord, this),
+            zone[i].coords.map(this.scaleCoord, this)
+          );
+        }
+
+        this.view.drawLine(
+          colorCode,
+          false,
+          lineWidth,
+          zone[zone.length - 1].coords.map(this.scaleCoord, this),
+          zone[0].coords.map(this.scaleCoord, this)
+        );
+      });
+    });
   }
 
   scaleCoord(coord) {
@@ -83,9 +121,15 @@ export default class Field {
     return Math.max(this.cellSize / 8, 2);
   }
 
+  getLineWidth() {
+    return Math.max(this.cellSize / 16, 2);
+  }
+
   clearOnKeyDown(e) {
     // Alt+C
-    if (!e.altKey || e.keyCode !== 67) { return; }
+    if (!e.altKey || e.keyCode !== 67) {
+      return;
+    }
 
     this.matrix.reset();
     this.nextPlayer = 'red';
@@ -94,7 +138,9 @@ export default class Field {
   }
 
   zoomOnScroll(e) {
-    if (!e.deltaY) { return; }
+    if (!e.deltaY) {
+      return;
+    }
 
     const newCellSize = this.cellSize * (1 - 0.05 * Math.sign(e.deltaY));
 
@@ -109,7 +155,7 @@ export default class Field {
 
     this.render();
 
-    if (linesIntersection && !this.matrix.hasDot(linesIntersection)) {
+    if (linesIntersection && !this.matrix.getDot(linesIntersection)) {
       this.view.drawDot(
         this.view.getColorCode(this.nextPlayer, 0.6),
         this.getDotRadius(),
@@ -121,8 +167,9 @@ export default class Field {
   placeDotOnClick(e) {
     const linesIntersection = this.getClosestGridLinesIntersection([e.offsetX, e.offsetY]);
 
-    if (linesIntersection && !this.matrix.hasDot(linesIntersection)) {
-      this.matrix.placeDot(linesIntersection, this.nextPlayer);
+    if (linesIntersection && !this.matrix.getDot(linesIntersection)) {
+      const dot = this.matrix.placeDot(linesIntersection, this.nextPlayer);
+      this.matrix.addDotToZones(dot);
       this.nextPlayer = this.nextPlayer === 'red' ? 'blue' : 'red';
       this.render();
       this.save();

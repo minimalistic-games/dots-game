@@ -6,7 +6,8 @@ module.exports = {
   rules: {
     "arrow-parens": ["error", "always"],
     "comma-dangle": ["error", "never"],
-    "no-mixed-operators": ["off"],
-    "no-restricted-syntax": ["off"]
+    "consistent-return": "off",
+    "no-mixed-operators": "off",
+    "no-restricted-syntax": "off"
   }
 };

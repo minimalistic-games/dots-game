@@ -5,7 +5,7 @@ export default class View {
     this.colorCodes = {
       white: [255, 255, 255],
       red: [192, 64, 0],
-      blue: [0, 64, 192]
+      blue: [0, 96, 192]
     };
   }
 
@@ -33,30 +33,31 @@ export default class View {
     );
   }
 
-  drawLine(color, dashed, lineWidth, from, to) {
+  drawLine(color, dashed, lineWidth, [fromX, fromY], [toX, toY]) {
     this.ctx.setLineDash(dashed ? [2, 4] : []);
     this.ctx.beginPath();
-    this.ctx.moveTo(from[0], from[1]);
-    this.ctx.lineTo(to[0], to[1]);
+    this.ctx.moveTo(fromX, fromY);
+    this.ctx.lineTo(toX, toY);
     this.ctx.lineWidth = lineWidth;
     this.ctx.strokeStyle = color;
     this.ctx.stroke();
   }
 
-  drawStrokeRect(from, to) {
+  drawStrokeRect([fromX, fromY], [toX, toY]) {
+    this.ctx.setLineDash([]);
     this.ctx.strokeRect(
-      from[0],
-      from[1],
-      to[0] - from[0],
-      to[1] - from[1]
+      fromX,
+      fromY,
+      toX - fromX,
+      toY - fromY
     );
   }
 
-  drawDot(style, radius, coords) {
+  drawDot(style, radius, [x, y]) {
     this.ctx.beginPath();
     this.ctx.arc(
-      coords[0],
-      coords[1],
+      x,
+      y,
       radius,
       0,
       2 * Math.PI,
@@ -64,5 +65,14 @@ export default class View {
     );
     this.ctx.fillStyle = style;
     this.ctx.fill();
+  }
+
+  drawDotCoords(style, radius, [x, y], [coordX, coordY]) {
+    this.ctx.fillStyle = style;
+    this.ctx.fillText(
+      `(${coordX}, ${coordY})`,
+      x + radius,
+      y - radius
+    );
   }
 }
