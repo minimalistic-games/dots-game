@@ -19,6 +19,40 @@ export default class Matrix {
     console.log(path.map(({ coords: [x, y] }) => `(${x}, ${y})`).join(' -> '));
   }
 
+  // "[1, 2, 3, 4]" equals to "[3, 2, 1, 4]" since "4" is a target dot
+  static arePathsEqual(p1, p2) {
+    if (p1.length !== p2.length) {
+      return false;
+    }
+
+    for (let i = 0; i < p1.length - 1; i += 1) {
+      if (!p1[i].isEqual(p2[p1.length - i - 2])) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  static takeUniquePaths(allPaths) {
+    const paths = allPaths.slice();
+    let path = null;
+
+    for (let i = 0; i < allPaths.length; i += 1) {
+      path = paths[i];
+
+      if (path !== null) {
+        for (let j = i + 1; j < allPaths.length; j += 1) {
+          if (paths[j] !== null && this.arePathsEqual(path, paths[j])) {
+            paths[j] = null;
+          }
+        }
+      }
+    }
+
+    return paths.filter((p) => p !== null);
+  }
+
   constructor() {
     this.reset();
   }
@@ -109,7 +143,7 @@ export default class Matrix {
       const paths = adjacentDots.map((adjacentDot) => this.makePaths([adjacentDot], dot));
       const colorZones = this.zones[dot.color];
 
-      this.flattenPaths(paths).forEach((path) => {
+      this.constructor.takeUniquePaths(this.flattenPaths(paths)).forEach((path) => {
         if (path.length) {
           colorZones.push(path);
         }
