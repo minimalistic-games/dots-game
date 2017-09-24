@@ -106,43 +106,55 @@ export default class Matrix {
     const adjacentDots = this.getAdjacentDots(dot);
 
     if (adjacentDots.length > 1) {
-      adjacentDots.forEach((adjacentDot) => {
-        this.makeZone(adjacentDot, dot);
-      });
-    }
-  }
+      const paths = adjacentDots.map((adjacentDot) => this.makePaths([adjacentDot], dot));
+      const colorZones = this.zones[dot.color];
 
-  makeZone(fromDot, toDot) {
-    this.getAdjacentDots(fromDot)
-      .filter((adjacentDot) => !adjacentDot.isEqual(toDot))
-      .forEach((adjacentDot) => {
-        // @todo: get all closed paths for a given adjacent dot
-        const path = this.makePath([toDot, fromDot, adjacentDot], toDot);
-
-        if (path) {
-          this.constructor.printPath(path);
-          this.zones[toDot.color].push(path);
+      this.flattenPaths(paths).forEach((path) => {
+        if (path.length) {
+          colorZones.push(path);
         }
       });
+    }
   }
 
-  makePath(path, toDot) {
-    const adjacentDots = this.getAdjacentDots(path[path.length - 1]);
-    let adjacentDot = null;
+  makePaths(fromPath, toDot) {
+    const paths = [];
 
-    for (let i = 0; i < adjacentDots.length; i += 1) {
-      adjacentDot = adjacentDots[i];
-
+    this.getAdjacentDots(fromPath[fromPath.length - 1]).forEach((adjacentDot) => {
       if (adjacentDot.isEqual(toDot)) {
-        return path;
+        if (fromPath.length > 2) {
+          paths.push(fromPath.concat(toDot));
+        }
+
+        return;
       }
 
-      if (adjacentDot.inPath(path)) {
-        break;
+      if (adjacentDot.inPath(fromPath)) {
+        return;
       }
 
-      return this.makePath(path.concat(adjacentDot), toDot);
-    }
+      paths.push(this.makePaths(fromPath.concat(adjacentDot), toDot));
+    });
+
+    return paths.length ? paths : null;
+  }
+
+  flattenPaths(nestedPaths) {
+    let paths = [];
+
+    nestedPaths.forEach((nestedPath) => {
+      if (!nestedPath) {
+        return;
+      }
+
+      if (nestedPath[0] instanceof Dot) {
+        paths.push(nestedPath);
+      } else {
+        paths = paths.concat(this.flattenPaths(nestedPath));
+      }
+    });
+
+    return paths;
   }
 
   forEachDot(iteratee) {
