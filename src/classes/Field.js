@@ -87,28 +87,25 @@ export default class Field {
 
   drawZones() {
     const lineWidth = this.getLineWidth();
+    const drawLine = (colorCode, a, b) => {
+      this.view.drawLine(
+        colorCode,
+        false,
+        lineWidth,
+        a.coords.map(this.scaleCoord, this),
+        b.coords.map(this.scaleCoord, this)
+      );
+    };
 
     ['red', 'blue'].forEach((color) => {
       const colorCode = this.view.getColorCode(color, 0.6);
 
       this.matrix.zones[color].forEach((zone) => {
         for (let i = 1; i < zone.length; i += 1) {
-          this.view.drawLine(
-            colorCode,
-            false,
-            lineWidth,
-            zone[i - 1].coords.map(this.scaleCoord, this),
-            zone[i].coords.map(this.scaleCoord, this)
-          );
+          drawLine(colorCode, zone[i - 1], zone[i]);
         }
 
-        this.view.drawLine(
-          colorCode,
-          false,
-          lineWidth,
-          zone[zone.length - 1].coords.map(this.scaleCoord, this),
-          zone[0].coords.map(this.scaleCoord, this)
-        );
+        drawLine(colorCode, zone[zone.length - 1], zone[0]);
       });
     });
   }

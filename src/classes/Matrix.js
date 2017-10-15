@@ -13,46 +13,65 @@ class Dot {
   }
 }
 
-export default class Matrix {
-  static printPath(path) {
-    // eslint-disable-next-line no-console
-    console.log(path.map(({ coords: [x, y] }) => `(${x}, ${y})`).join(' -> '));
+// eslint-disable-next-line no-unused-vars
+function printPath(path) {
+  // eslint-disable-next-line no-console
+  console.log(path.length, path.map(({ coords: [x, y] }) => `(${x}, ${y})`).join('-'));
+}
+
+// "[1, 2, 3, 4]" equals to "[3, 2, 1, 4]" since "4" is a target dot
+function arePathsEqual(p1, p2) {
+  if (p1.length !== p2.length) {
+    return false;
   }
 
-  // "[1, 2, 3, 4]" equals to "[3, 2, 1, 4]" since "4" is a target dot
-  static arePathsEqual(p1, p2) {
-    if (p1.length !== p2.length) {
+  for (let i = 0; i < p1.length - 1; i += 1) {
+    if (!p1[i].isEqual(p2[p1.length - i - 2])) {
       return false;
     }
-
-    for (let i = 0; i < p1.length - 1; i += 1) {
-      if (!p1[i].isEqual(p2[p1.length - i - 2])) {
-        return false;
-      }
-    }
-
-    return true;
   }
 
-  static takeUniquePaths(allPaths) {
-    const paths = allPaths.slice();
-    let path = null;
+  return true;
+}
 
-    for (let i = 0; i < allPaths.length; i += 1) {
-      path = paths[i];
+function takeUniquePaths(allPaths) {
+  const paths = allPaths.slice();
+  let path = null;
 
-      if (path !== null) {
-        for (let j = i + 1; j < allPaths.length; j += 1) {
-          if (paths[j] !== null && this.arePathsEqual(path, paths[j])) {
-            paths[j] = null;
-          }
+  for (let i = 0; i < allPaths.length; i += 1) {
+    path = paths[i];
+
+    if (path !== null) {
+      for (let j = i + 1; j < allPaths.length; j += 1) {
+        if (paths[j] !== null && arePathsEqual(path, paths[j])) {
+          paths[j] = null;
         }
       }
     }
-
-    return paths.filter((p) => p !== null);
   }
 
+  return paths.filter((p) => p !== null);
+}
+
+function flattenPaths(nestedPaths) {
+  let paths = [];
+
+  nestedPaths.forEach((nestedPath) => {
+    if (!nestedPath) {
+      return;
+    }
+
+    if (nestedPath[0] instanceof Dot) {
+      paths.push(nestedPath);
+    } else {
+      paths = paths.concat(flattenPaths(nestedPath));
+    }
+  });
+
+  return paths;
+}
+
+export default class Matrix {
   constructor() {
     this.reset();
   }
@@ -139,16 +158,17 @@ export default class Matrix {
   addDotToZones(dot) {
     const adjacentDots = this.getAdjacentDots(dot);
 
-    if (adjacentDots.length > 1) {
-      const paths = adjacentDots.map((adjacentDot) => this.makePaths([adjacentDot], dot));
-      const colorZones = this.zones[dot.color];
-
-      this.constructor.takeUniquePaths(this.flattenPaths(paths)).forEach((path) => {
-        if (path.length) {
-          colorZones.push(path);
-        }
-      });
+    if (adjacentDots.length < 2) {
+      return;
     }
+
+    const paths = adjacentDots.map((adjacentDot) => this.makePaths([adjacentDot], dot));
+    const colorZones = this.zones[dot.color];
+
+    takeUniquePaths(flattenPaths(paths)).forEach((path) => {
+      colorZones.push(path);
+      printPath(path);
+    });
   }
 
   makePaths(fromPath, toDot) {
@@ -171,24 +191,6 @@ export default class Matrix {
     });
 
     return paths.length ? paths : null;
-  }
-
-  flattenPaths(nestedPaths) {
-    let paths = [];
-
-    nestedPaths.forEach((nestedPath) => {
-      if (!nestedPath) {
-        return;
-      }
-
-      if (nestedPath[0] instanceof Dot) {
-        paths.push(nestedPath);
-      } else {
-        paths = paths.concat(this.flattenPaths(nestedPath));
-      }
-    });
-
-    return paths;
   }
 
   forEachDot(iteratee) {
