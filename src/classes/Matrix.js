@@ -53,6 +53,70 @@ function takeUniquePaths(allPaths) {
   return paths.filter((p) => p !== null);
 }
 
+function isSlopingLine([a, b]) {
+  const [xa, ya] = a.coords;
+  const [xb, yb] = b.coords;
+
+  return xa !== xb && ya !== yb;
+}
+
+function getSloppingLines(path) {
+  const slopingLines = [];
+  let line = null;
+
+  for (let i = 1; i < path.length; i += 1) {
+    line = [path[i - 1], path[i]];
+
+    if (isSlopingLine(line)) {
+      slopingLines.push(line);
+    }
+  }
+
+  line = [path[path.length - 1], path[0]];
+
+  if (isSlopingLine(line)) {
+    slopingLines.push(line);
+  }
+
+  return slopingLines;
+}
+
+// "[(xa, ya), (xb, yb)]" is crossing "[(xa, yb), (xb, ya)]" and "[(xb, ya), (xa, yb)]"
+function areLinesCrossing([a, b], [c, d]) {
+  const [xa, ya] = a.coords;
+  const [xb, yb] = b.coords;
+  const [xc, yc] = c.coords;
+  const [xd, yd] = d.coords;
+
+  if (xa === xc && yb === yc && xb === xd && ya === yd) {
+    return true;
+  }
+
+  if (xa === xd && yb === yd && xb === xc && ya === yc) {
+    return true;
+  }
+
+  return false;
+}
+
+function isSelfCrossingPath(path) {
+  const lines = getSloppingLines(path);
+
+  for (let i = 0; i < lines.length; i += 1) {
+    for (let j = i + 1; j < lines.length; j += 1) {
+      if (areLinesCrossing(lines[i], lines[j])) {
+        return true;
+      }
+    }
+  }
+
+  return false;
+}
+
+function takeNotSelfCrossingPaths(allPaths) {
+  return allPaths.filter((p) => !isSelfCrossingPath(p));
+}
+
 function flattenPaths(nestedPaths) {
   let paths = [];
 
@@ -165,7 +229,7 @@ export default class Matrix {
     const paths = adjacentDots.map((adjacentDot) => this.makePaths([adjacentDot], dot));
     const colorZones = this.zones[dot.color];
 
-    takeUniquePaths(flattenPaths(paths)).forEach((path) => {
+    takeNotSelfCrossingPaths(takeUniquePaths(flattenPaths(paths))).forEach((path) => {
       colorZones.push(path);
       printPath(path);
     });
