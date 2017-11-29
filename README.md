@@ -29,8 +29,8 @@ html5 version of a classic paper-based [game](https://en.wikipedia.org/wiki/Dots
 
 ```bash
 $ yarn install
-$ yarn server:dev  # runs a dev server on "http://localhost:8080"
-$ yarn build       # builds production assets to "./dist/"
+$ yarn run:dev     # runs a dev server on "http://localhost:8080"
+$ yarn build:prod  # builds production assets to "./dist/"
 ```
 
 test:
