@@ -6,13 +6,14 @@
   "scripts": {
     "lint": "eslint ./src/",
     "test": "mocha --compilers js:./src/test/_compiler.js --require ./src/test/_setup.js --reporter spec ./src/test",
-    "clean": "rm -rf dist/*",
+    "clean": "rm -rf ./dist/*",
     "prebuild": "yarn run clean && yarn run lint && yarn run test",
     "prebuild:dev": "yarn prebuild",
     "prebuild:prod": "yarn prebuild",
     "run:dev": "export NODE_ENV=development PUBLIC_PATH=/ && webpack-dashboard webpack-dev-server",
     "build:dev": "export NODE_ENV=development PUBLIC_PATH=/ && webpack --progress --bail",
-    "build:prod": "export NODE_ENV=production PUBLIC_PATH=https://oleksmarkh.github.io/dots-game/ && webpack --progress --bail"
+    "build:prod": "export NODE_ENV=production PUBLIC_PATH=https://oleksmarkh.github.io/dots-game/ && webpack --progress --bail",
+    "deploy": "gh-pages -d ./dist/"
   },
   "repository": {
     "type": "git",
@@ -36,6 +37,7 @@
     "eslint-loader": "^1.9.0",
     "eslint-plugin-import": "^2.7.0",
     "extract-text-webpack-plugin": "^3.0.0",
+    "gh-pages": "^1.1.0",
     "html-webpack-plugin": "^2.29.0",
     "mocha": "^3.4.2",
     "sinon": "^2.4.1",

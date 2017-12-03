@@ -25,24 +25,12 @@ html5 version of a classic paper-based [game](https://en.wikipedia.org/wiki/Dots
 · · · · · · · · ·
 ```
 
-## setup
+## Setup
 
 ```bash
 $ yarn install
+$ yarn test
 $ yarn run:dev     # runs a dev server on "http://localhost:8080"
 $ yarn build:prod  # builds production assets to "./dist/"
+$ yarn deploy      # pushes "./dist/" to "http://oleksmarkh.github.io/dots-game/"
 ```
-
-test:
-
-```bash
-$ yarn test
-```
-
-## features/todo
-
-- [x] zoom
-- [x] autosave
-- [ ] moves history/replay
-- [ ] offline mode for 2 players
-- [ ] online multiplayer (via WebRTC)
