@@ -1,6 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const DashboardPlugin = require('webpack-dashboard/plugin');
 
@@ -45,6 +46,7 @@ loaders.css = {
 plugins.html = new HtmlWebpackPlugin({
   template: './index.html',
   title: 'dots-game',
+  favicon: '../assets/favicon/favicon.ico',
 });
 
 plugins.commonsChunk = new webpack.optimize.CommonsChunkPlugin({
@@ -56,6 +58,13 @@ plugins.commonsChunk = new webpack.optimize.CommonsChunkPlugin({
 plugins.extractText = new ExtractTextPlugin({
   filename: `styles${IS_PROD ? '-[hash].min' : ''}.css`,
 });
+
+plugins.copy = new CopyWebpackPlugin([
+  {
+    from: '../assets/favicon/*',
+    to: '[name].[ext]',
+  },
+]);
 
 plugins.uglifyJs = new webpack.optimize.UglifyJsPlugin({
   compress: {
@@ -90,6 +99,7 @@ const config = {
     plugins.html,
     plugins.commonsChunk,
     plugins.extractText,
+    plugins.copy,
   ].concat(IS_PROD
     ? [
       plugins.uglifyJs,
