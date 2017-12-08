@@ -95,6 +95,18 @@ const config = {
     ],
   },
 
+  resolve: {
+    modules: [
+      SRC_DIR,
+      NODE_MODULES_DIR,
+    ],
+    extensions: [
+      '.js',
+      '.css',
+      '.json',
+    ]
+  },
+
   plugins: [
     plugins.html,
     plugins.commonsChunk,

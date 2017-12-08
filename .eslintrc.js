@@ -3,11 +3,18 @@ module.exports = {
   env: {
     "browser": true
   },
+  settings: {
+    "import/resolver": {
+      node: {
+        paths: ["src"],
+      },
+    },
+  },
   rules: {
     "arrow-parens": ["error", "always"],
     "comma-dangle": ["error", "never"],
     "consistent-return": "off",
     "no-mixed-operators": "off",
-    "no-restricted-syntax": "off"
-  }
+    "no-restricted-syntax": "off",
+  },
 };
