@@ -79,7 +79,10 @@ plugins.dashboard = new DashboardPlugin();
 const config = {
   context: SRC_DIR,
 
-  entry: './app.js',
+  entry: [
+    'babel-polyfill',
+    './app.js',
+  ],
 
   output: {
     path: DIST_DIR,
