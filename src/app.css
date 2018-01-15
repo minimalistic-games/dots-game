@@ -4,6 +4,15 @@ body {
   background-color: #234;
 }
 
+::selection {
+  background-color: #c04000;
+  color: white;
+}
+
+kbd {
+  color: #aaa;
+}
+
 p {
   margin: 0 0 1em;
   font-family: monospace;
