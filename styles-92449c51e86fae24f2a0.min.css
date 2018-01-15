@@ -1,0 +1,21 @@
+body {
+  padding: 0.2em;
+  color: #888;
+  background-color: #234;
+}
+
+::selection {
+  background-color: #c04000;
+  color: white;
+}
+
+kbd {
+  color: #aaa;
+}
+
+p {
+  margin: 0 0 1em;
+  font-family: monospace;
+}
+
+/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzdHlsZXMtOTI0NDljNTFlODZmYWUyNGYyYTAubWluLmNzcyIsInNvdXJjZVJvb3QiOiIifQ==*/
