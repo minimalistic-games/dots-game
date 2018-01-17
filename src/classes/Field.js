@@ -1,13 +1,13 @@
+import config from 'config';
+import { getColorCode } from 'classes/View';
+
 export default class Field {
   constructor(matrix, view, cellSize) {
     this.matrix = matrix;
     this.view = view;
-
     this.cellSize = cellSize;
-    this.minCellSize = 10;
-    this.maxCellSize = 100;
 
-    this.nextPlayer = 'red';
+    this.nextPlayer = config.firstPlayer;
   }
 
   load() {
@@ -37,7 +37,7 @@ export default class Field {
 
   drawGrid() {
     const dimensions = this.view.getDimensions();
-    const colorCode = this.view.getColorCode('white', 0.6);
+    const colorCode = getColorCode('white', 0.6);
 
     [0, 1].forEach((axis) => {
       const size = dimensions[axis];
@@ -63,8 +63,8 @@ export default class Field {
 
   drawDots() {
     const colorCodes = {
-      red: this.view.getColorCode('red', 1),
-      blue: this.view.getColorCode('blue', 1),
+      red: getColorCode('red', 1),
+      blue: getColorCode('blue', 1),
     };
 
     const dotRadius = this.getDotRadius();
@@ -98,7 +98,7 @@ export default class Field {
     };
 
     ['red', 'blue'].forEach((color) => {
-      const colorCode = this.view.getColorCode(color, 0.6);
+      const colorCode = getColorCode(color, 0.6);
 
       this.matrix.zones[color].forEach((zone) => {
         for (let i = 1; i < zone.length; i += 1) {
@@ -129,7 +129,7 @@ export default class Field {
     }
 
     this.matrix.reset();
-    this.nextPlayer = 'red';
+    this.nextPlayer = config.firstPlayer;
     this.render();
     this.save();
   }
@@ -141,7 +141,7 @@ export default class Field {
 
     const newCellSize = this.cellSize * (1 - 0.05 * Math.sign(e.deltaY));
 
-    if (newCellSize > this.minCellSize && newCellSize < this.maxCellSize) {
+    if (newCellSize > config.minCellSize && newCellSize < config.maxCellSize) {
       this.cellSize = newCellSize;
       this.render();
     }
@@ -154,7 +154,7 @@ export default class Field {
 
     if (linesIntersection && !this.matrix.getDot(linesIntersection)) {
       this.view.drawDot(
-        this.view.getColorCode(this.nextPlayer, 0.6),
+        getColorCode(this.nextPlayer, 0.6),
         this.getDotRadius(),
         linesIntersection.map(this.scaleCoord, this),
       );

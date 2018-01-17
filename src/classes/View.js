@@ -1,16 +1,12 @@
+import config from 'config';
+
+export function getColorCode(color, opacity) {
+  return `rgba(${config.colorCodes[color].concat(opacity).join(',')})`;
+}
+
 export default class View {
   constructor(ctx) {
     this.ctx = ctx;
-
-    this.colorCodes = {
-      white: [255, 255, 255],
-      red: [192, 64, 0],
-      blue: [0, 96, 192],
-    };
-  }
-
-  getColorCode(color, opacity) {
-    return `rgba(${this.colorCodes[color].concat(opacity).join(',')})`;
   }
 
   listenTo(e, callback) {
