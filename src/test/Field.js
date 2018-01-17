@@ -45,8 +45,8 @@ describe('Field', () => {
     const view600x600 = new View({
       canvas: {
         width: 600,
-        height: 600
-      }
+        height: 600,
+      },
     });
     const field600x600 = new Field(null, view600x600, 40);
     View.prototype.drawLine = spy();
@@ -58,8 +58,8 @@ describe('Field', () => {
     const view300x200 = new View({
       canvas: {
         width: 300,
-        height: 200
-      }
+        height: 200,
+      },
     });
     const field300x200 = new Field(null, view300x200, 40);
     View.prototype.drawLine = spy();

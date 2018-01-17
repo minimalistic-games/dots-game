@@ -144,7 +144,7 @@ export default class Matrix {
     this.spots = [];
     this.zones = {
       red: [],
-      blue: []
+      blue: [],
     };
   }
 
@@ -209,7 +209,7 @@ export default class Matrix {
   countDots() {
     const dotsNumbers = {
       red: 0,
-      blue: 0
+      blue: 0,
     };
 
     this.forEachDot((_, color) => {

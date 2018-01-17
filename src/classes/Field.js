@@ -53,7 +53,7 @@ export default class Field {
           i % 5,
           1,
           axis ? from.reverse() : from,
-          axis ? to.reverse() : to
+          axis ? to.reverse() : to,
         );
       }
     });
@@ -64,7 +64,7 @@ export default class Field {
   drawDots() {
     const colorCodes = {
       red: this.view.getColorCode('red', 1),
-      blue: this.view.getColorCode('blue', 1)
+      blue: this.view.getColorCode('blue', 1),
     };
 
     const dotRadius = this.getDotRadius();
@@ -73,14 +73,14 @@ export default class Field {
       this.view.drawDot(
         colorCodes[color],
         dotRadius,
-        coords.map(this.scaleCoord, this)
+        coords.map(this.scaleCoord, this),
       );
 
       this.view.drawDotCoords(
         colorCodes[color],
         dotRadius,
         coords.map(this.scaleCoord, this),
-        coords
+        coords,
       );
     });
   }
@@ -93,7 +93,7 @@ export default class Field {
         false,
         lineWidth,
         a.coords.map(this.scaleCoord, this),
-        b.coords.map(this.scaleCoord, this)
+        b.coords.map(this.scaleCoord, this),
       );
     };
 
@@ -156,7 +156,7 @@ export default class Field {
       this.view.drawDot(
         this.view.getColorCode(this.nextPlayer, 0.6),
         this.getDotRadius(),
-        linesIntersection.map(this.scaleCoord, this)
+        linesIntersection.map(this.scaleCoord, this),
       );
     }
   }

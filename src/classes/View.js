@@ -5,7 +5,7 @@ export default class View {
     this.colorCodes = {
       white: [255, 255, 255],
       red: [192, 64, 0],
-      blue: [0, 96, 192]
+      blue: [0, 96, 192],
     };
   }
 
@@ -20,7 +20,7 @@ export default class View {
   getDimensions() {
     return [
       this.ctx.canvas.width,
-      this.ctx.canvas.height
+      this.ctx.canvas.height,
     ];
   }
 
@@ -29,7 +29,7 @@ export default class View {
       0,
       0,
       this.ctx.canvas.width,
-      this.ctx.canvas.height
+      this.ctx.canvas.height,
     );
   }
 
@@ -49,7 +49,7 @@ export default class View {
       fromX,
       fromY,
       toX - fromX,
-      toY - fromY
+      toY - fromY,
     );
   }
 
@@ -61,7 +61,7 @@ export default class View {
       radius,
       0,
       2 * Math.PI,
-      false
+      false,
     );
     this.ctx.fillStyle = style;
     this.ctx.fill();
@@ -72,7 +72,7 @@ export default class View {
     this.ctx.fillText(
       `(${coordX}, ${coordY})`,
       x + radius,
-      y - radius
+      y - radius,
     );
   }
 }

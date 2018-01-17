@@ -4,5 +4,5 @@ global.localStorage = {
   removeItem() {},
   getItem() {},
   clear() {},
-  length: 0
+  length: 0,
 };
