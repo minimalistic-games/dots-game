@@ -31,9 +31,10 @@ html5 version of a classic paper-based [game](https://en.wikipedia.org/wiki/Dots
 ```bash
 $ yarn install
 $ yarn test
-$ yarn run:dev     # runs a dev server
-$ yarn build:prod  # builds production assets to "./dist/"
-$ yarn deploy      # pushes "./dist/" to "http://oleksmarkh.github.io/dots-game/"
+$ yarn run:dev           # runs a dev server
+$ yarn run:dev-dashboard # runs a dev server in the "webpack-dashboard"
+$ yarn build:prod        # builds production assets to "./dist/"
+$ yarn deploy            # pushes "./dist/" to "http://oleksmarkh.github.io/dots-game/"
 ```
 
 [travis-image]: https://img.shields.io/travis/oleksmarkh/dots-game/master.svg?style=flat-square

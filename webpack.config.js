@@ -5,10 +5,11 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const DashboardPlugin = require('webpack-dashboard/plugin');
 
-const {NODE_ENV, PUBLIC_PATH} = process.env;
+const { NODE_ENV, PUBLIC_PATH } = process.env;
 
 const IS_PROD = NODE_ENV === 'production';
 
+const ROOT_DIR = path.resolve('./');
 const SRC_DIR = path.resolve('./src/');
 const DIST_DIR = path.resolve('./dist/');
 const NODE_MODULES_DIR = path.resolve('./node_modules/');
@@ -92,24 +93,24 @@ const config = {
     publicPath: PUBLIC_PATH,
   },
 
+  resolve: {
+    modules: [
+      ROOT_DIR,
+      'node_modules',
+    ],
+    extensions: [
+      '.js',
+      '.css',
+      '.json',
+    ],
+  },
+
   module: {
     rules: [
       loaders.eslint,
       loaders.js,
       loaders.css,
     ],
-  },
-
-  resolve: {
-    modules: [
-      SRC_DIR,
-      NODE_MODULES_DIR,
-    ],
-    extensions: [
-      '.js',
-      '.css',
-      '.json',
-    ]
   },
 
   plugins: [

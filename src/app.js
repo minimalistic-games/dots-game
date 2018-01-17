@@ -1,12 +1,12 @@
 import 'hidpi-canvas/dist/hidpi-canvas.min';
 
-import config from 'config';
+import config from 'src/config';
 
-import Matrix from 'classes/Matrix';
-import View from 'classes/View';
-import Field from 'classes/Field';
+import Matrix from 'src/classes/Matrix';
+import View from 'src/classes/View';
+import Field from 'src/classes/Field';
 
-import 'app.css';
+import 'src/app.css';
 
 const matrix = new Matrix();
 const view = new View(document.querySelector('canvas').getContext('2d'));

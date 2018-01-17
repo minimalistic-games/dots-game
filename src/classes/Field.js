@@ -1,5 +1,5 @@
-import config from 'config';
-import { getColorCode } from 'classes/View';
+import { getColorCode } from 'src/utils';
+import config from 'src/config';
 
 export default class Field {
   constructor(matrix, view, cellSize) {

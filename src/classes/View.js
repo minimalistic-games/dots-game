@@ -1,9 +1,3 @@
-import config from 'config';
-
-export function getColorCode(color, opacity) {
-  return `rgba(${config.colorCodes[color].concat(opacity).join(',')})`;
-}
-
 export default class View {
   constructor(ctx) {
     this.ctx = ctx;
