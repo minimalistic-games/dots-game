@@ -13,19 +13,19 @@
     "run:dev": "export NODE_ENV=development PUBLIC_PATH=/ && webpack-dev-server",
     "run:dev-dashboard": "export NODE_ENV=development PUBLIC_PATH=/ && webpack-dashboard webpack-dev-server",
     "build:dev": "export NODE_ENV=development PUBLIC_PATH=/ && webpack --progress --bail",
-    "build:prod": "export NODE_ENV=production PUBLIC_PATH=https://oleksmarkh.github.io/dots-game/ && webpack --progress --bail",
+    "build:prod": "export NODE_ENV=production PUBLIC_PATH=https://minimalistic-games.github.io/dots-game/ && webpack --progress --bail",
     "deploy": "gh-pages -d ./dist/"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/oleksmarkh/dots-game.git"
+    "url": "https://github.com/minimalistic-games/dots-game.git"
   },
   "author": "Oleksii Markhovskyi",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/oleksmarkh/dots-game/issues"
+    "url": "https://github.com/minimalistic-games/dots-game/issues"
   },
-  "homepage": "https://github.com/oleksmarkh/dots-game",
+  "homepage": "https://github.com/minimalistic-games/dots-game",
   "devDependencies": {
     "babel-core": "6.26.0",
     "babel-loader": "7.1.2",
